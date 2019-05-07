@@ -2,12 +2,17 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <style>
-      
-    </style>
+    <link rel="stylesheet" href="./css/screen.css">
   </head>
   <body>
-    <ul id="messages"></ul>
+    <section id="bandSection">
+      <span id="bandNameSpan"></span>
+      <img id="bandImg" src="./img/default.jpg"/>
+    </section>
+
+    <section id="scheduleSection">
+      <ul id="scheduleList"></ul>
+    </section>
 
     <!-- I am using socket.io - I need to import the client-side JS code in here: -->
     <script src="/socket.io/socket.io.js"></script>

@@ -1,0 +1,53 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: system-ui;
+}
+
+header {
+    width: 100%;
+    padding: 0.5rem 0;
+    background: rgb(95, 0, 95);
+    /* box-shadow: 0px 3px 10px #313131; */
+}
+
+main {
+    padding: 0vh 5vw;
+}
+
+#festHeading {
+    width: 13rem;
+    height: auto;
+    display: block;
+    margin: auto;
+    background-color: white;
+    border-radius: 0.5rem;
+    font-size: 3rem;
+    text-align: center;
+}
+
+h2 {
+    margin: 1rem 0;
+    font-size: 2rem;
+}
+
+#stagesList, #artistsList {
+    width: 100% - 10px;
+    height: auto;
+    margin: 1rem 0;
+    background-color: white;
+    border: 5px solid rgb(95, 0, 95);
+    border-radius: 0.5rem;
+    list-style-type: none;
+    box-shadow: 3px 3px 10px #313131;
+    overflow: hidden;
+}
+
+#stagesList li, #artistsList li {
+    padding: 1rem 1rem;
+    background-color: white;
+}
+
+#stagesList li:nth-child(even), #artistsList li:nth-child(even) {
+    background-color: #cacaca;
+}
