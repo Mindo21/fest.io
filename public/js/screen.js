@@ -2,40 +2,44 @@
 
 const socket = io();
 const bandName = document.getElementById('bandNameSpan');
-const img = document.getElementById('bandImg');
+const bandImg = document.getElementById('bandImg');
 
 let currentArtist = null;
-let images = ["../img/default.jpg"];
+const images = ["../img/default.jpg"];
 let x = -1;
 
 function displayNextImage() {
     x = (x === images.length - 1) ? 0 : x + 1;
-    img.src = images[x];
+    bandImg.src = images[x];
 }
 
 function displayPreviousImage() {
     x = (x <= 0) ? images.length - 1 : x - 1;
-    img.src = images[x];
+    bandImg.src = images[x];
 }
 
 function startTimer() {
-    setInterval(displayNextImage, 3000);
+    setInterval(displayNextImage, 5000);
 }
 
-async function downloadImages() {
+function getCurrentImages() {
     if (currentArtist) {
-        imageJSON = await fetch("/img/:" + currentArtist.images);
+        currentArtist.images.forEach((img) => {
+            images.push("/img/" + currentArtist.id + "/" + img)
+        });
     }
 }
 
 async function getCurrentArtist() {
-    const artistId = "aaaaaaaa";
-    currentArtist = await fetch("/artist/:" + artistId);
+    const artistId = 2;
+    const response = await fetch("/artist/" + artistId);
+    if (!response.ok) throw response;
+    currentArtist = await response.json();
 }
 
 async function init() {
     await getCurrentArtist();
-    await downloadImages();
+    getCurrentImages();
     startTimer();
 }
 

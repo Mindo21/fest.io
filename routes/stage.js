@@ -12,12 +12,13 @@ router.post('/', addStage);
 
 
 // functions
-
+// GET
 function sendStages(req, res) {
     const stages = db.getStages();
     res.json(stages);
 }
 
+// POST
 function addStage(req, res) {
     const stages = db.addStage(req.body);
     res.json(stages);

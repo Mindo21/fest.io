@@ -13,12 +13,14 @@ const db = require(config.db);
 // routers
 const artistRouter = require('./routes/artist.js');
 const stageRouter = require('./routes/stage.js');
+const imgRouter = require('./routes/img.js');
 
 app.use(express.static('public'));
 app.use(express.json());
 
 app.use('/artist', artistRouter);
 app.use('/stage', stageRouter);
+app.use('/img', imgRouter);
 
 
 // Set up the sockets

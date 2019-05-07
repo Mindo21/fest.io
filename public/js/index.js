@@ -7,7 +7,7 @@ const stagesList = document.getElementById('stagesList');
 
 btnAddArtist.addEventListener('click', async () => {
     const newArtist = {
-        artistId: "aaaaaaaa",
+        id: 1,
         name: "Gee Band",
         genre: "funk",
         startTime: "10:00",
@@ -32,7 +32,7 @@ btnAddArtist.addEventListener('click', async () => {
 
 btnAddStage.addEventListener('click', async () => {
     const newStage = {
-        stageId: "aaaaaaab",
+        id: 1,
         name: "Main Stage"
     }
 
