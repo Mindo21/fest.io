@@ -1,24 +1,25 @@
 'use strict';
 
+// server constants
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+
+// utils
 const config = require('./config.js');
 const db = require(config.db);
+
+// routers
+const artistRouter = require('./routes/artist.js');
+const stageRouter = require('./routes/stage.js');
 
 app.use(express.static('public'));
 app.use(express.json());
 
-// GET requests
+app.use('/artist', artistRouter);
+app.use('/stage', stageRouter);
 
-app.get('/artist', sendArtists);
-app.get('/stage', sendStages);
-
-// POST requests
-
-app.post('/artist', addArtist);
-app.post('/stage', addStage);
 
 // Set up the sockets
 
@@ -50,26 +51,6 @@ io.on('connection', function(socket) {
         io.emit('UPDATE_STAGES', stages);
     }
 });
-
-function sendArtists(req, res) {
-    const artists = db.getArtists();
-    res.json(artists);
-}
-
-function addStage(req, res) {
-    const stages = db.addStage(req.body);
-    res.json(stages);
-}
-
-function sendStages(req, res) {
-    const stages = db.getStages();
-    res.json(stages);
-}
-
-function addArtist(req, res) {
-    const artists = db.addArtist(req.body);
-    res.json(artists);
-}
 
 // server.listen() instead of app.listen(), because I am using socket.io
 server.listen(8080, (err) => {

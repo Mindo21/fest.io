@@ -29,7 +29,7 @@ async function downloadImages() {
 }
 
 async function getCurrentArtist() {
-    const artistId = 1;
+    const artistId = "aaaaaaaa";
     currentArtist = await fetch("/artist/:" + artistId);
 }
 
