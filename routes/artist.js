@@ -5,11 +5,11 @@ const config = require('../config.js');
 const db = require(config.db);
 
 // GET requests
-router.get('/', sendArtists);
-router.get('/:id', sendArtist);
+router.get('/', sendArtists); // get all artists
+router.get('/:id', sendArtist); // get artist by id
 
 // POST requests
-router.post('/', addArtist);
+router.post('/', addArtist); // add new artist (json)
 
 
 // functions

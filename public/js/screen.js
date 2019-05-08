@@ -5,6 +5,7 @@ const bandName = document.getElementById('bandNameSpan');
 const bandImg = document.getElementById('bandImg');
 
 let currentArtist = null;
+const artists = [];
 const images = ["../img/default.jpg"];
 let x = -1;
 
@@ -37,7 +38,15 @@ async function getCurrentArtist() {
     currentArtist = await response.json();
 }
 
+async function getAllArtists() {
+    const stageId = 2;
+    const response = await fetch("/stage/" + stageId + "/artist");
+    if (!response.ok) throw response;
+    currentArtist = await response.json();
+}
+
 async function init() {
+    getAllArtists();
     await getCurrentArtist();
     getCurrentImages();
     startTimer();

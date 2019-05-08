@@ -61,16 +61,10 @@ async function loadArtists(artists) {
     artistsList.innerHTML = "";
     if (artists.length <= 0) {
         // if there are no artists
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode("There are no artists stored..."));
-        artistsList.appendChild(li);
+        addArtistListItem();
     } else {
         // add each artist to the list
-        artists.forEach((artist) => {
-            const li = document.createElement("li");
-            li.appendChild(document.createTextNode(JSON.stringify(artist)));
-            artistsList.appendChild(li);
-        });
+        artists.forEach((artist) => addArtistListItem(artist));
     }
 }
 
@@ -85,19 +79,60 @@ async function loadStages(stages) {
     stagesList.innerHTML = "";
     if (stages.length <= 0) {
         // if there are no stages
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode("There are no stages stored..."));
-        stagesList.appendChild(li);
+        addStageListItem();
     } else {
         // add each artist to the list
-        stages.forEach((stage) => {
-            const li = document.createElement("li");
-            li.appendChild(document.createTextNode(JSON.stringify(stage)));
-            stagesList.appendChild(li);
-        });
+        stages.forEach((stage) => addStageListItem(stage));
     }
 }
 
+function addArtistListItem(artist) {
+    if (artist) {
+        // if artist is given
+        const icon = document.createElement("img");
+        icon.classList.add("artistIcon");
+        icon.src = "../img/default.jpg";
+        const name = document.createElement("span");
+        name.classList.add("artistName");
+        name.appendChild(document.createTextNode(artist.name));
+        const link = document.createElement("a");
+        link.setAttribute('href', '../screen.html');
+        link.appendChild(document.createTextNode('Click here to see artist...'));
+
+        const artistItem = document.createElement("li");
+        artistItem.appendChild(icon);
+        artistItem.appendChild(name);
+        artistItem.appendChild(link);
+        artistsList.appendChild(artistItem);
+    } else {
+        // if there is no stage
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode("There are no artists stored..."));
+        artistsList.appendChild(li);
+    }
+}
+
+function addStageListItem(stage) {
+    if (stage) {
+        // if stage is given
+        const name = document.createElement("span");
+        name.classList.add("stageName");
+        name.appendChild(document.createTextNode(stage.name));
+        const link = document.createElement("a");
+        link.setAttribute('href', '../screen.html');
+        link.appendChild(document.createTextNode('Click here to see stage screen...'));
+
+        const stageItem = document.createElement("li");
+        stageItem.appendChild(name);
+        stageItem.appendChild(link);
+        stagesList.appendChild(stageItem);
+    } else {
+        // if there is no stage
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode("There are no stages stored..."));
+        stagesList.appendChild(li);
+    }
+}
 
 function init() {
     loadArtists();

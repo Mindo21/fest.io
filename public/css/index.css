@@ -46,8 +46,25 @@ h2 {
 #stagesList li, #artistsList li {
     padding: 1rem 1rem;
     background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 #stagesList li:nth-child(even), #artistsList li:nth-child(even) {
     background-color: #cacaca;
+}
+
+.artistIcon {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 100%;
+}
+
+.artistName, .stageName {
+    width: auto;
+    height: auto;
+    font-size: 1.2rem;
+    margin: 0 1rem;
 }

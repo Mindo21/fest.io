@@ -9,6 +9,15 @@ const artists = [
         endTime: "15:00",
         stageId: 1,
         images: ["crab.jpg", "landscape.jpg", "night.jpg"]
+    },
+    {
+        id: 3,
+        name: "Fearless Flyers",
+        genre: "funk",
+        startTime: "16:00",
+        endTime: "17:00",
+        stageId: 2,
+        images: ["crab.jpg", "night.jpg"]
     }
 ];
 const stages = [
@@ -26,8 +35,16 @@ function getArtists() {
     return artists;
 }
 
+function getStage(id) {
+    return stages.find((stage) => stage.id == id);
+}
+
 function getStages() {
     return stages;
+}
+
+function getArtistsByStage(id) {
+    return artists.filter((artist) => artist.stageId == id);
 }
 
 function addArtist(data) {
@@ -43,7 +60,10 @@ function addStage(data) {
 module.exports = {
     getArtist: getArtist,
     getArtists: getArtists,
+    getStage: getStage,
     getStages: getStages,
+    getArtistsByStage: getArtistsByStage,
+
     addArtist: addArtist,
     addStage: addStage,
 }
