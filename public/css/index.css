@@ -6,20 +6,17 @@
 
 header {
     width: 100%;
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
     background: rgb(95, 0, 95);
 }
 
-/* main {
-    padding: 0vh 5vw;
-} */
-
 #festHeading {
-    width: 13rem;
+    width: auto;
     height: auto;
+    color: white;
+    font-weight: lighter;
     display: block;
     margin: auto;
-    background-color: white;
     border-radius: 0.5rem;
     font-size: 3rem;
     text-align: center;
