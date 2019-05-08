@@ -8,12 +8,11 @@ header {
     width: 100%;
     padding: 0.5rem 0;
     background: rgb(95, 0, 95);
-    /* box-shadow: 0px 3px 10px #313131; */
 }
 
-main {
+/* main {
     padding: 0vh 5vw;
-}
+} */
 
 #festHeading {
     width: 13rem;
@@ -27,14 +26,18 @@ main {
 }
 
 h2 {
-    margin: 1rem 0;
+    margin: 1rem 5vw;
     font-size: 2rem;
+}
+
+span {
+    margin: 0 5vw;
 }
 
 #stagesList, #artistsList {
     width: 100% - 10px;
     height: auto;
-    margin: 1rem 0;
+    margin: 1rem 5vw;
     background-color: white;
     border: 5px solid rgb(95, 0, 95);
     border-radius: 0.5rem;
@@ -43,28 +46,66 @@ h2 {
     overflow: hidden;
 }
 
-#stagesList li, #artistsList li {
-    padding: 1rem 1rem;
-    background-color: white;
+#stagesList li a, #artistsList li a {
+    height: 100%;
+    padding: 0rem 1rem;
+    text-decoration: none;
+    color: black;
+    margin: auto;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+    /* flex-direction: row; */
+    /* justify-content: flex-start; */
     align-items: center;
 }
 
+#stagesList li a:hover, #artistsList li a:hover {
+    background: rgb(219, 163, 219);
+}
+
+#stagesList li, #artistsList li {
+    height: 4rem;
+    background-color: white;
+}
+
 #stagesList li:nth-child(even), #artistsList li:nth-child(even) {
-    background-color: #cacaca;
+    background-color: #dfdfdf;
 }
 
 .artistIcon {
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 3rem;
+    height: 3rem;
+    margin: 0 0.5rem;
     border-radius: 100%;
+}
+
+.addIcon {
+    width: 3.6rem;
+    height: 3.6rem;
+    margin: 0 0.15rem;
 }
 
 .artistName, .stageName {
     width: auto;
     height: auto;
+    color: black;
+    text-decoration: none;
     font-size: 1.2rem;
     margin: 0 1rem;
 }
+
+.artistTime {
+    width: auto;
+    height: auto;
+    font-size: 1rem;
+    margin: 0 1rem;
+}
+
+.divider {
+    width: 100%;
+    height: 2px;
+    background: rgb(95, 0, 95);
+    margin: 2vh 0;
+}
+
+
+

@@ -2,6 +2,7 @@
     <head>
         <title>fest.io</title>
         <link rel="stylesheet" href="./css/index.css">
+        <meta name="viewport" content="width=device-width">
     </head>
 
     <body>
@@ -13,15 +14,18 @@
             <section id="artistsSection">
                 <h2 id="artistsHeading">Artists:</h2>
                 <ul id="artistsList"></ul>
+                <span>Click on any artist to see/edit details...</span>
             </section>
+
+            <div class="divider"></div>
 
             <section id="stagesSection">
                 <h2 id="stagesHeading">Stages:</h2>
                 <ul id="stagesList"></ul>
+                <span>Click on any stage to redirect to its screen...</span>
             </section>
 
-
-            <a href="screen.html">Click here to be redirected to the stage screen.</a>
+            <div class="divider"></div>
 
             <section id="addArtistSection">
                 <h2 id="addArtistHeading">Add Artist:</h2>
@@ -37,8 +41,6 @@
         
         </main>
 
-        <!-- I am using socket.io - I need to import the client-side JS code in here: -->
-        <script src="/socket.io/socket.io.js"></script>
         <script src="./js/index.js"></script>
     </body>
 </html>

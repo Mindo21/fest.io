@@ -5,18 +5,22 @@ const artists = [
         id: 2,
         name: "Blue Zodiac",
         genre: "blues",
+        description: "A band that plays blues",
         startTime: "14:00",
         endTime: "15:00",
         stageId: 1,
+        icon: "icon.jpg",
         images: ["crab.jpg", "landscape.jpg", "night.jpg"]
     },
     {
         id: 3,
         name: "Fearless Flyers",
         genre: "funk",
+        description: "We like to play on guitars only...",
         startTime: "16:00",
         endTime: "17:00",
         stageId: 2,
+        icon: "icon.jpg",
         images: ["crab.jpg", "night.jpg"]
     }
 ];

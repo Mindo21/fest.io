@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const app = require("../app.js");
 
 const config = require('../config.js');
 const db = require(config.db);
@@ -30,6 +31,7 @@ function sendArtist(req, res) {
 // POST
 function addArtist(req, res) {
     const artists = db.addArtist(req.body);
+    app.updateArtistsSocket(artists);
     res.json(artists);
 }
 

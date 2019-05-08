@@ -1,0 +1,40 @@
+<!doctype html>
+    <head>
+        <title>fest.io</title>
+        <link rel="stylesheet" href="./css/add_artist.css">
+        <meta name="viewport" content="width=device-width">
+    </head>
+
+    <body>
+        <header>
+            <h1 id="festHeading">fest.io</h1>
+        </header>
+
+        <main>
+            <section class="addNewFormSection">
+                <form id="addNewForm">
+                    <fieldset>
+                        <legend><span class="number">1</span> New Artist</legend>
+                        <input type="text" name="name" placeholder="Artist Name">
+                        <input type="text" name="genre" placeholder="Genre">
+                        <textarea name="description" placeholder="Short Description"></textarea>
+                        <legend><span class="number">2</span> Stage</legend>
+                        <select id="stageSelection" name="stageName">
+                            <optgroup label="Stages">
+                                <option value="fishkeeping">Fishkeeping</option>
+                            </optgroup>
+                        </select>      
+                        </fieldset>
+                        <fieldset>
+                        <legend><span class="number">3</span> Images</legend>
+                        <textarea name="images" placeholder="Images"></textarea>
+                    </fieldset>
+                    <input type="submit" value="Apply" onclick="applyClicked()"/>
+                </form>
+            </section>
+        
+        </main>
+
+        <script src="./js/add_artist.js"></script>
+    </body>
+</html>

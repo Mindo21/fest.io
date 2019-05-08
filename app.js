@@ -10,6 +10,12 @@ const io = require('socket.io')(server);
 const config = require('./config.js');
 const db = require(config.db);
 
+// this has to be above routers, because routers are using these functions
+module.exports = {
+    updateArtistsSocket: updateArtistsSocket,
+    updateStagesSocket: updateStagesSocket,
+}
+
 // routers
 const artistRouter = require('./routes/artist.js');
 const stageRouter = require('./routes/stage.js');
@@ -21,7 +27,6 @@ app.use(express.json());
 app.use('/artist', artistRouter);
 app.use('/stage', stageRouter);
 app.use('/img', imgRouter);
-
 
 // Set up the sockets
 
@@ -39,20 +44,15 @@ io.on('connection', function(socket) {
         connectedSocketsCount--;
         console.log('connected sockets: ', connectedSocketsCount);
     });
-
-    socket.on('ADD_ARTIST', addArtist);
-    socket.on('ADD_STAGE', addStage);
-
-    function addArtist(data) {
-        const artists = db.addArtist(data);
-        io.emit('UPDATE_ARTISTS', artists);
-    }
-
-    function addStage(data) {
-        const stages = db.addStage(data);
-        io.emit('UPDATE_STAGES', stages);
-    }
 });
+
+function updateArtistsSocket(artists) {
+    io.emit('UPDATE_ARTISTS', artists);
+}
+
+function updateStagesSocket(stages) {
+    io.emit('UPDATE_STAGES', stages);
+}
 
 // server.listen() instead of app.listen(), because I am using socket.io
 server.listen(8080, (err) => {

@@ -1,5 +1,7 @@
 'use strict';
 
+const defaultImg = "../img/default.jpg";
+
 const btnAddArtist = document.getElementById('btnAddArtist');
 const btnAddStage = document.getElementById('btnAddStage');
 const artistsList = document.getElementById('artistsList');
@@ -10,9 +12,11 @@ btnAddArtist.addEventListener('click', async () => {
         id: 1,
         name: "Gee Band",
         genre: "funk",
+        description: "Gangster band playing funk and hip hop only...",
         startTime: "10:00",
         endTime: "11:00",
-        stageId: 1,
+        stageId: 2,
+        icon: "icon.jpg",
         images: ["crab.jpg", "landscape.jpg", "night.jpg"]
     }
 
@@ -59,13 +63,10 @@ async function loadArtists(artists) {
     }    
 
     artistsList.innerHTML = "";
-    if (artists.length <= 0) {
-        // if there are no artists
-        addArtistListItem();
-    } else {
-        // add each artist to the list
-        artists.forEach((artist) => addArtistListItem(artist));
-    }
+    // add each artist to the list
+    artists.forEach((artist) => addArtistListItem(artist));
+    // add the add row
+    addArtistListItem();
 }
 
 async function loadStages(stages) {
@@ -77,60 +78,102 @@ async function loadStages(stages) {
     }
 
     stagesList.innerHTML = "";
-    if (stages.length <= 0) {
-        // if there are no stages
-        addStageListItem();
-    } else {
-        // add each artist to the list
-        stages.forEach((stage) => addStageListItem(stage));
-    }
+    // add each stage to the list
+    stages.forEach((stage) => addStageListItem(stage));
+    // add the add row
+    addStageListItem();
 }
 
-function addArtistListItem(artist) {
+async function addArtistListItem(artist) {
     if (artist) {
         // if artist is given
+        const artistItem = document.createElement("li");
+        artistsList.appendChild(artistItem);
+
+        const artistItemLink = document.createElement("a");
+        artistItemLink.classList.add("artistItemLink");
+        artistItemLink.setAttribute('href', '/detail_artist.html?id=' + artist.id);
+        artistItem.appendChild(artistItemLink);
+
         const icon = document.createElement("img");
         icon.classList.add("artistIcon");
-        icon.src = "../img/default.jpg";
+        icon.src = await getArtistIcon(artist);
+        artistItemLink.appendChild(icon);
+
         const name = document.createElement("span");
         name.classList.add("artistName");
         name.appendChild(document.createTextNode(artist.name));
-        const link = document.createElement("a");
-        link.setAttribute('href', '../screen.html');
-        link.appendChild(document.createTextNode('Click here to see artist...'));
+        artistItemLink.appendChild(name);
 
-        const artistItem = document.createElement("li");
-        artistItem.appendChild(icon);
-        artistItem.appendChild(name);
-        artistItem.appendChild(link);
-        artistsList.appendChild(artistItem);
+        const time = document.createElement("span");
+        time.classList.add("artistTime");
+        time.appendChild(document.createTextNode(artist.startTime + " - " + artist.endTime));
+        artistItemLink.appendChild(time);
     } else {
-        // if there is no stage
+        // if there is no artist
         const li = document.createElement("li");
-        li.appendChild(document.createTextNode("There are no artists stored..."));
         artistsList.appendChild(li);
+        const liLink = document.createElement("a");
+        liLink.classList.add("addNewItemLink");
+        liLink.setAttribute('href', '/add_artist.html');
+        li.appendChild(liLink);
+
+        const icon = document.createElement("img");
+        icon.classList.add("addIcon");
+        icon.src = "../img/add.svg";
+        liLink.appendChild(icon);
+
+        const name = document.createElement("span");
+        name.classList.add("artistName");
+        name.appendChild(document.createTextNode("Add new..."));
+        liLink.appendChild(name);
     }
+}
+
+async function getArtistIcon(artist) {
+    const response = await fetch('/img/' + artist.id + '/' + artist.icon);    
+    // if there is no icon found, return default image
+    if (response.status != 200) {
+        return defaultImg;
+    }
+    // return the call to the icon
+    return '/img/' + artist.id + '/' + artist.icon;
 }
 
 function addStageListItem(stage) {
     if (stage) {
         // if stage is given
+        const stageItem = document.createElement("li");
+        stagesList.appendChild(stageItem);
+
+        const stageItemLink = document.createElement("a");
+        stageItemLink.classList.add("stageItemLink");
+        stageItemLink.setAttribute('href', '/screen.html?id=' + stage.id);
+        stageItem.appendChild(stageItemLink);
+
         const name = document.createElement("span");
         name.classList.add("stageName");
         name.appendChild(document.createTextNode(stage.name));
-        const link = document.createElement("a");
-        link.setAttribute('href', '../screen.html');
-        link.appendChild(document.createTextNode('Click here to see stage screen...'));
-
-        const stageItem = document.createElement("li");
-        stageItem.appendChild(name);
-        stageItem.appendChild(link);
-        stagesList.appendChild(stageItem);
+        stageItemLink.appendChild(name);
     } else {
         // if there is no stage
         const li = document.createElement("li");
-        li.appendChild(document.createTextNode("There are no stages stored..."));
         stagesList.appendChild(li);
+
+        const liLink = document.createElement("a");
+        liLink.classList.add("addNewItemLink");
+        liLink.setAttribute('href', '/add_stage.html');
+        li.appendChild(liLink);
+
+        const icon = document.createElement("img");
+        icon.classList.add("addIcon");
+        icon.src = "../img/add.svg";
+        liLink.appendChild(icon);
+
+        const name = document.createElement("span");
+        name.classList.add("stageName");
+        name.appendChild(document.createTextNode("Add new..."));
+        liLink.appendChild(name);
     }
 }
 

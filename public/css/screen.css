@@ -3,7 +3,33 @@
     padding: 0;
 }
 
-#bandImg {
+#stageSection {
+    text-align: center;
+}
+
+#stageNameSpan {
+    font-size: 2rem;
+    margin: auto;
+}
+
+#artistSection {
+    text-align: center;
+}
+
+#artistImg {
     width: 100%;
     height: auto;
+}
+
+.artistIcon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 100%;
+}
+
+.artistName {
+    width: auto;
+    height: auto;
+    font-size: 1.2rem;
+    margin: 0 1rem;
 }
