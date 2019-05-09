@@ -100,6 +100,8 @@ async function loadArtists(artists) {
     artists.forEach((artist) => addArtistListItem(artist));
     // add the add row
     addArtistListItem();
+
+    return artists;
 }
 
 async function loadStages(stages) {
@@ -115,6 +117,7 @@ async function loadStages(stages) {
     stages.forEach((stage) => addStageListItem(stage));
     // add the add row
     addStageListItem();
+    return stages;
 }
 
 function removeArtistListItem(artistListItem) {
@@ -173,7 +176,7 @@ async function addArtistListItem(artist) {
     }
 }
 
-function generateArtistForm(artistListItem) {
+async function generateArtistForm(artistListItem) {
     let artistId = null;
     const li = document.createElement("li");
     li.classList.add('addingArtist');
@@ -220,22 +223,6 @@ function generateArtistForm(artistListItem) {
     inputGenre.setAttribute("placeholder", "Genre");
     fieldSet.appendChild(inputGenre);
 
-    const inputStartTime = document.createElement('input');
-    inputStartTime.setAttribute("type", "text");
-    inputStartTime.setAttribute("name", "startTime");
-    inputStartTime.setAttribute("placeholder", "10:00");
-    inputStartTime.classList.add("timepicker");
-    fieldSet.appendChild(inputStartTime);
-
-    const inputEndTime = document.createElement('input');
-    inputEndTime.setAttribute("type", "text");
-    inputEndTime.setAttribute("name", "endTime");
-    inputEndTime.setAttribute("placeholder", "12:00");
-    inputEndTime.classList.add("timepicker");
-    fieldSet.appendChild(inputEndTime);
-
-    const timePickers = M.Timepicker.init(document.querySelectorAll('.timepicker'), { twelveHour: false });
-
     const inputDescription = document.createElement('textarea');
     inputDescription.setAttribute("name", "description");
     inputDescription.setAttribute("placeholder", "Short Description");
@@ -257,6 +244,36 @@ function generateArtistForm(artistListItem) {
     optGroup.setAttribute("label", "Stages");
     stageSelection.appendChild(optGroup);
 
+    // load stages into the option group
+    const stages = await loadStages();
+    stages.forEach((stage) => {
+        const option = document.createElement("option");
+        option.setAttribute("value", stage.id);
+        option.appendChild(document.createTextNode(stage.name));
+        optGroup.appendChild(option);
+    });
+
+    const inputStartTime = document.createElement('input');
+    inputStartTime.setAttribute("type", "text");
+    inputStartTime.setAttribute("name", "startTime");
+    inputStartTime.setAttribute("placeholder", "Start Time");
+    inputStartTime.classList.add("timepicker");
+    fieldSet.appendChild(inputStartTime);
+
+    const inputEndTime = document.createElement('input');
+    inputEndTime.setAttribute("type", "text");
+    inputEndTime.setAttribute("name", "endTime");
+    inputEndTime.setAttribute("placeholder", "End Time");
+    inputEndTime.classList.add("timepicker");
+    fieldSet.appendChild(inputEndTime);
+
+    // using materialize's timepicker
+    const timePickers = M.Timepicker.init(document.querySelectorAll('.timepicker'), {
+        twelveHour: false,
+        autoClose: true,
+        defaultTime: 'now'
+    });
+
     const legend3 = document.createElement('legend');
     fieldSet.appendChild(legend3);
     const span3 = document.createElement('span');
@@ -266,14 +283,16 @@ function generateArtistForm(artistListItem) {
     legend3.appendChild(document.createTextNode('Images'));
 
     const inputApply = document.createElement('input');
-    inputApply.setAttribute("type", "submit");
+    inputApply.setAttribute("type", "button");
     inputApply.setAttribute("value", "Apply");
+    inputApply.setAttribute("id", "applyBtn");
     inputApply.setAttribute("onclick", "applyClicked()");
     addNewForm.appendChild(inputApply);
 
     const inputCancel = document.createElement('input');
     inputCancel.setAttribute("type", "button");
     inputCancel.setAttribute("value", "Cancel");
+    inputCancel.setAttribute("id", "cancelBtn");
     inputCancel.setAttribute("onclick", "cancelClicked()");
     addNewForm.appendChild(inputCancel);
 }

@@ -161,7 +161,8 @@ span {
 	color:#000000;
 	-webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 	box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
-	margin-bottom: 30px;
+    margin-bottom: 30px;
+    display: unset;
 }
 #addNewFormSection input[type="text"]:focus,
 #addNewFormSection input[type="date"]:focus,
@@ -173,7 +174,11 @@ span {
 #addNewFormSection input[type="url"]:focus,
 #addNewFormSection textarea:focus,
 #addNewFormSection select:focus{
-	background: #e4d9e4;
+	background: #f7edf7;
+}
+#addNewFormSection input[type="text"].timepicker {
+    width: 40%;
+    margin-right: 10%;
 }
 #addNewFormSection select{
 	-webkit-appearance: menulist-button;
@@ -194,8 +199,7 @@ span {
 	border-radius: 15px 15px 15px 0px;
 }
 
-#addNewFormSection input[type="submit"],
-#addNewFormSection input[type="button"]
+#applyBtn, #cancelBtn
 {
 	position: relative;
 	display: block;
@@ -212,20 +216,18 @@ span {
     border-radius: 0.3rem;
 	margin-bottom: 10px;
 }
-
-#addNewFormSection input[type="button"] {
+#cancelBtn {
     background: rgb(206, 36, 36);
     border: 1px solid rgb(165, 12, 12);
     border-width: 1px 1px 3px;
 }
-
-#addNewFormSection input[type="submit"]:hover
+#applyBtn:hover
 {
     cursor: pointer;
 	background: rgb(95, 0, 95);
 }
 
-#addNewFormSection input[type="button"]:hover {
+#cancelBtn:hover {
     cursor: pointer;
     background: rgb(100, 3, 3);
 }
