@@ -9,33 +9,6 @@ const btnAddStage = document.getElementById('btnAddStage');
 const artistsList = document.getElementById('artistsList');
 const stagesList = document.getElementById('stagesList');
 
-btnAddArtist.addEventListener('click', async () => {
-    const newArtist = {
-        id: 1,
-        name: "Gee Band",
-        genre: "funk",
-        description: "Gangster band playing funk and hip hop only...",
-        startTime: "10:00",
-        endTime: "11:00",
-        stageId: 2,
-        icon: "icon.jpg",
-        images: ["crab.jpg", "landscape.jpg", "night.jpg"]
-    }
-
-    // send the new artist to server
-    const response = await fetch('/artist', {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newArtist)
-    });
-    if (!response.ok) throw response;
-    const artists = await response.json();
-
-    loadArtists(artists);
-});
-
 btnAddStage.addEventListener('click', async () => {
     const newStage = {
         id: 1,
@@ -80,7 +53,54 @@ async function artistClicked(id) {
     else console.log("the artist has been deleted");
 }
 
-async function cancelClicked(id) {
+async function artistApplyClicked(id) {
+    let newArtist;
+    const form = document.forms[0]; // there should always be only one
+
+    // if (id) {
+        newArtist = {
+            id: id,
+            name: form.elements.name.value,
+            genre: form.elements.genre.value,
+            description: form.elements.description.value,
+            startTime: form.elements.startTime.value,
+            endTime: form.elements.endTime.value,
+            stageId: form.elements.stageName.value,
+            icon: "icon.jpg",
+            images: ["crab.jpg", "landscape.jpg", "night.jpg"]
+        }
+    // } else {
+    //     newArtist = {
+    //         id: id,
+    //         name: form.elements.name.value,
+    //         genre: form.elements.genre.value,
+    //         description: form.elements.description.value,
+    //         startTime: form.elements.startTime.value,
+    //         endTime: form.elements.endTime.value,
+    //         stageId: form.elements.stageName.value,
+    //         icon: "icon.jpg",
+    //         images: ["crab.jpg", "landscape.jpg", "night.jpg"]
+    //     }
+    // }
+
+    console.log("new artist: ", JSON.stringify(newArtist));
+
+    // upload the new artist
+    const response = await fetch('/artist', {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newArtist)
+    });
+    if (!response.ok) throw response;
+    const artists = await response.json();
+
+    // load new artists
+    loadArtists(artists);
+}
+
+async function artistCancelClicked() {
     await loadArtists();
 }
 
@@ -286,14 +306,14 @@ async function generateArtistForm(artistListItem) {
     inputApply.setAttribute("type", "button");
     inputApply.setAttribute("value", "Apply");
     inputApply.setAttribute("id", "applyBtn");
-    inputApply.setAttribute("onclick", "applyClicked()");
+    inputApply.setAttribute("onclick", "artistApplyClicked(this.parentElement.id)");
     addNewForm.appendChild(inputApply);
 
     const inputCancel = document.createElement('input');
     inputCancel.setAttribute("type", "button");
     inputCancel.setAttribute("value", "Cancel");
     inputCancel.setAttribute("id", "cancelBtn");
-    inputCancel.setAttribute("onclick", "cancelClicked()");
+    inputCancel.setAttribute("onclick", "artistCancelClicked()");
     addNewForm.appendChild(inputCancel);
 }
 
