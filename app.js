@@ -23,6 +23,7 @@ const imgRouter = require('./routes/img.js');
 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(express.urlencoded());
 
 app.use('/artist', artistRouter);
 app.use('/stage', stageRouter);

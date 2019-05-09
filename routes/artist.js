@@ -47,7 +47,9 @@ function sendArtist(req, res) {
 async function addArtist(req, res) {
     console.log("filessss: ", req.files);
     console.log("body: ", req.body);
-    const artists = await db.addArtist(req.files, req.body);
+    console.log("headers: ", req.headers['content-type']);
+    let artists = [];
+    // if (req.body != {}) artists = await db.addArtist(req.files, req.body);
     app.updateArtistsSocket(artists);
     res.json(artists);
 }

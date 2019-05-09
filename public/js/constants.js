@@ -1,0 +1,1 @@
+const defaultImg = "../img/default.jpg";

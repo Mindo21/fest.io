@@ -3,6 +3,7 @@
         <title>fest.io</title>
         <!-- Importing materialize, because I want to use their time picker -->
         <link rel="stylesheet" href="./css/materialize.min.css">
+        <link rel="stylesheet" href="./css/add_artist_form.css">
         <link rel="stylesheet" href="./css/index.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -18,7 +19,7 @@
             <section id="artistsSection">
                 <h2 id="artistsHeading">Artists:</h2>
                 <ul id="artistsList"></ul>
-                <span>Click on any artist to see/edit details...</span>
+                <span class="hint">Click on any artist to see/edit details...</span>
             </section>
 
             <div class="divider"></div>
@@ -26,7 +27,7 @@
             <section id="stagesSection">
                 <h2 id="stagesHeading">Stages:</h2>
                 <ul id="stagesList"></ul>
-                <span>Click on any stage to be redirected to its screen...</span>
+                <span class="hint">Click on any stage to be redirected to its screen...</span>
             </section>
 
             <div class="divider"></div>
@@ -40,6 +41,8 @@
 
         <!-- Importing materialize, because I want to use their time picker -->
         <script src="./js/materialize.min.js"></script>
+        <script src="./js/constants.js"></script>
+        <script src="./js/add_artist_form.js"></script>
         <script src="./js/index.js"></script>
     </body>
 </html>
