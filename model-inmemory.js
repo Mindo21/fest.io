@@ -1,5 +1,12 @@
 'use strict';
 
+const fs = require('fs');
+const { promisify } = require('util');
+
+const unlinkAsync = promisify(fs.unlink);
+const renameAsync = promisify(fs.rename);
+const config = require("./config");
+
 const MAX_ID = 1000; // store up to 1000 artists/stages
 
 const artists = [
@@ -12,7 +19,7 @@ const artists = [
         endTime: "15:00",
         stageId: 1,
         icon: "icon.jpg",
-        images: ["crab.jpg", "landscape.jpg", "night.jpg"]
+        images: []
     },
     {
         id: 2,
@@ -23,7 +30,7 @@ const artists = [
         endTime: "17:00",
         stageId: 2,
         icon: "icon.jpg",
-        images: ["crab.jpg", "night.jpg"]
+        images: ["crab.jpg", "night.jpg", "landscape.jpg"]
     },
     {
         id: 3,
@@ -34,7 +41,7 @@ const artists = [
         endTime: "11:00",
         stageId: 2,
         icon: "icon.jpg",
-        images: ["crab.jpg", "landscape.jpg", "night.jpg"]
+        images: []
     }
 ];
 const stages = [
@@ -64,17 +71,71 @@ function getArtistsByStage(id) {
     return artists.filter((artist) => artist.stageId == id);
 }
 
-function addArtist(artist) {
-    const existingArtistIndex = artists.findIndex((a) => a.id == artist.id);
-    if (existingArtistIndex != -1) {
-        // if there already is an artist, replace him
-        artists.splice(existingArtistIndex, 1);
+async function addArtist(reqFiles, newArtist) {
+    // create the artist first
+    const existingArtist = artists.find((a) => a.id == newArtist.id);
+    let artist;
+    if (existingArtist) {
+        // if there already is an artist, give him the new data (the images are missing)
+        existingArtist.name = newArtist.name;
+        existingArtist.genre = newArtist.genre;
+        existingArtist.description = newArtist.description;
+        existingArtist.startTime = newArtist.startTime;
+        existingArtist.endTime = newArtist.endTime;
+        existingArtist.stageId = newArtist.stageId;
+        artist = existingArtist;
     } else {
+        // create new artist
         const newId = findNewId(artists);
         if (newId == -1) return artists     // if the limit of artists is reached, dont add it
-        artist.id = newId;
+        newArtist.id = newId;
+        newArtist["icon"] = 'icon.jpg';
+        newArtist["images"] = [];
+        artist = newArtist;
     }
-    artists.push(artist);
+    // then save the images
+    // move the files where we want them
+    // create the folder with artistId
+    try {
+        if (!fs.existsSync(config.uploaded_img + artist.id)){
+          fs.mkdirSync(config.uploaded_img + artist.id);
+        }
+    } catch (err) {
+    console.error(err);
+    }
+    
+    
+    // icon file
+    if (reqFiles.iconFile) {
+        const iconFile = reqFiles.iconFile[0];
+        const newIconFilePath = config.uploaded_img + artist.id + '/icon.jpg';
+        try {
+            await renameAsync(iconFile.path, newIconFilePath);
+        } catch (e) {
+            throw ['failed to move incoming file', e];
+        }
+    }
+    // img files (images of the artist)
+    const imgFilesNames = [];
+    if (reqFiles.imgFile) {
+        for (const imgFile of reqFiles.imgFile) {
+            const fileExt = imgFile.mimetype.split('/')[1] || 'png';
+            const newFilename = imgFile.filename + '.' + fileExt;
+            const newImgFilesPath = config.uploaded_img + artist.id + '/' + newFilename;
+            try {
+                await renameAsync(imgFile.path, newImgFilesPath);
+            } catch (e) {
+                throw ['failed to move incoming file', e];
+            }
+            imgFilesNames.push(newFilename);
+            console.log("images:", imgFilesNames);
+        };
+    }
+    // now add the files to the artist
+    artist.images = artist.images.concat(imgFilesNames);
+    console.log("new artist:", artist);
+    // actually add the created artist to the array and return artists
+    if (!existingArtist) artists.push(artist);
     return artists;
 }
 

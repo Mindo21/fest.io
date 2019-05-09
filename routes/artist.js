@@ -1,16 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const app = require("../app.js");
+const multer = require('multer');
 
 const config = require('../config.js');
 const db = require(config.db);
+
+// multer is a package that handles file uploads nicely
+const uploader = multer({
+    dest: config.uploaded_img,
+    limits: { // for security
+      fields: 10,
+      fileSize: 1024*1024*20,
+      files: 11,    // up to 10 photos + icon
+    },
+  });
 
 // GET requests
 router.get('/', sendArtists); // get all artists
 router.get('/:id', sendArtist); // get artist by id
 
 // POST requests
-router.post('/', addArtist); // add new artist (json)
+router.post(
+    '/',    // on call '/' method: 'POST'
+    uploader.fields([{ name: 'iconFile', maxCount: 1 }, { name: 'imgFile', maxCount: 11 }]),    // upload icon and images
+    addArtist   // add new artist
+);
 
 
 // functions
@@ -29,8 +44,10 @@ function sendArtist(req, res) {
 }
 
 // POST
-function addArtist(req, res) {
-    const artists = db.addArtist(req.body);
+async function addArtist(req, res) {
+    console.log("filessss: ", req.files);
+    console.log("body: ", req.body);
+    const artists = await db.addArtist(req.files, req.body);
     app.updateArtistsSocket(artists);
     res.json(artists);
 }

@@ -232,5 +232,10 @@ span {
     background: rgb(100, 3, 3);
 }
 
+.uploadedImg {
+    width: 100%;
+    height: auto;
+}
+
 
 
