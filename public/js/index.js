@@ -132,44 +132,44 @@ async function addArtistListItem(artist) {
         const artistItem = document.createElement("li");
         artistsList.appendChild(artistItem);
 
-        const artistItemLink = document.createElement("button");
-        artistItemLink.classList.add("artistItemLink");
-        artistItemLink.setAttribute('id', artist.id);
-        artistItemLink.setAttribute('onclick', 'artistClicked(this.id)');
-        artistItem.appendChild(artistItemLink);
+        const artistItemBtn = document.createElement("button");
+        artistItemBtn.classList.add("artistItemBtn");
+        artistItemBtn.setAttribute('id', artist.id);
+        artistItemBtn.setAttribute('onclick', 'artistClicked(this.id)');
+        artistItem.appendChild(artistItemBtn);
 
         const icon = document.createElement("img");
         icon.classList.add("artistIcon");
         icon.src = await getArtistIcon(artist);
-        artistItemLink.appendChild(icon);
+        artistItemBtn.appendChild(icon);
 
         const name = document.createElement("span");
         name.classList.add("artistName");
         name.appendChild(document.createTextNode(artist.name));
-        artistItemLink.appendChild(name);
+        artistItemBtn.appendChild(name);
 
         const time = document.createElement("span");
         time.classList.add("artistTime");
         time.appendChild(document.createTextNode(artist.startTime + " - " + artist.endTime));
-        artistItemLink.appendChild(time);
+        artistItemBtn.appendChild(time);
     } else {
         // if there is no artist
         const li = document.createElement("li");
         artistsList.appendChild(li);
-        const liLink = document.createElement("button");
-        liLink.classList.add("addNewItemLink");
-        liLink.setAttribute('onclick', 'addingNewArtist()');
-        li.appendChild(liLink);
+        const addNewItemBtn = document.createElement("button");
+        addNewItemBtn.classList.add("addNewItemBtn");
+        addNewItemBtn.setAttribute('onclick', 'addingNewArtist()');
+        li.appendChild(addNewItemBtn);
 
         const icon = document.createElement("img");
         icon.classList.add("addIcon");
         icon.src = "../img/add.svg";
-        liLink.appendChild(icon);
+        addNewItemBtn.appendChild(icon);
 
         const name = document.createElement("span");
         name.classList.add("artistName");
         name.appendChild(document.createTextNode("Add new..."));
-        liLink.appendChild(name);
+        addNewItemBtn.appendChild(name);
     }
 }
 
@@ -219,6 +219,22 @@ function generateArtistForm(artistListItem) {
     inputGenre.setAttribute("name", "genre");
     inputGenre.setAttribute("placeholder", "Genre");
     fieldSet.appendChild(inputGenre);
+
+    const inputStartTime = document.createElement('input');
+    inputStartTime.setAttribute("type", "text");
+    inputStartTime.setAttribute("name", "startTime");
+    inputStartTime.setAttribute("placeholder", "10:00");
+    inputStartTime.classList.add("timepicker");
+    fieldSet.appendChild(inputStartTime);
+
+    const inputEndTime = document.createElement('input');
+    inputEndTime.setAttribute("type", "text");
+    inputEndTime.setAttribute("name", "endTime");
+    inputEndTime.setAttribute("placeholder", "12:00");
+    inputEndTime.classList.add("timepicker");
+    fieldSet.appendChild(inputEndTime);
+
+    const timePickers = M.Timepicker.init(document.querySelectorAll('.timepicker'), { twelveHour: false });
 
     const inputDescription = document.createElement('textarea');
     inputDescription.setAttribute("name", "description");

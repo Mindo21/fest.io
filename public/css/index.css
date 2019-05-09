@@ -48,7 +48,7 @@ span {
     transition: all 0.5s ease-out;
 }
 
-#stagesList li button, #artistsList li button {
+#stagesList li .addNewItemBtn, #artistsList li .artistItemBtn, #artistsList li .addNewItemBtn {
     width: 100%;
     height: 100%;
     padding: 0rem 1rem;
@@ -61,7 +61,7 @@ span {
     align-items: center;
 }
 
-#stagesList li button:hover, #artistsList li button:hover {
+#stagesList li .addNewItemBtn:hover, #artistsList li .artistItemBtn:hover, #artistsList li .addNewItemBtn:hover {
     cursor: pointer;
     background: rgb(219, 163, 219);
 }
