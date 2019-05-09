@@ -2,12 +2,15 @@
     <head>
         <title>fest.io</title>
         <link rel="stylesheet" href="./css/add_artist.css">
+        <link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
         <meta name="viewport" content="width=device-width">
     </head>
 
     <body>
         <header>
-            <h1 id="festHeading">fest.io</h1>
+            <a href="index.html">
+                <h1 id="festHeading">fest.io</h1>
+            </a>
         </header>
 
         <main>
@@ -17,15 +20,14 @@
                         <legend><span class="number">1</span> New Artist</legend>
                         <input type="text" name="name" placeholder="Artist Name">
                         <input type="text" name="genre" placeholder="Genre">
+                        <input type="text" name="startTime" class="timepicker">
                         <textarea name="description" placeholder="Short Description"></textarea>
                         <legend><span class="number">2</span> Stage</legend>
                         <select id="stageSelection" name="stageName">
                             <optgroup label="Stages">
                                 <option value="fishkeeping">Fishkeeping</option>
                             </optgroup>
-                        </select>      
-                        </fieldset>
-                        <fieldset>
+                        </select>  
                         <legend><span class="number">3</span> Images</legend>
                         <textarea name="images" placeholder="Images"></textarea>
                     </fieldset>
@@ -35,6 +37,7 @@
         
         </main>
 
+        <script src="./js/materialize.min.js"></script>
         <script src="./js/add_artist.js"></script>
     </body>
 </html>

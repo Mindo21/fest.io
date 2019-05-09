@@ -10,6 +10,10 @@ header {
     background: rgb(95, 0, 95);
 }
 
+header a {
+    text-decoration: none;
+}
+
 #festHeading {
     width: auto;
     height: auto;

@@ -7,6 +7,11 @@ function applyClicked() {
 
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.timepicker');
+    var instances = M.Timepicker.init(elems, { twelveHour: false });
+});
+
 async function fetchStages() {
     // fetch all stages
     const response = await fetch('/stage');
