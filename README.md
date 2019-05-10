@@ -3,8 +3,8 @@
 fest.io - a client-server application helping festivals all around the globe.
 A web-application, with which a creator of any one day festival can inform audience about what is about to happen, and beautify the overall experience of the performances.
 
-Features
---------
+Key features
+------------
 Things to do on the device:
 
 1. Click on an artist to see/edit their details. (If edited, the changes are shown in real time on stage screen or the device...)
@@ -42,3 +42,4 @@ Additional info
 ---------------
 
 The stage screens are connected through websocket to the server, in order to react to changes from the organiser's device in real-time.
+I was thinking about expanding the project by including an actual database, but I kept on using my model-inmemory database at the end. The downside is that everytime the server restarts, all the manipulated data is lost :/
