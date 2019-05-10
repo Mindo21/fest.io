@@ -57,7 +57,7 @@ function updateStagesSocket(stages) {
 }
 
 // server.listen() instead of app.listen(), because I am using socket.io
-server.listen(8080, (err) => {
+server.listen(PORT, (err) => {
     if (err) console.error('error starting server: ', err);
-    else console.log('server started, listening on port 8080...');
+    else console.log('server started, listening on port ' + PORT);
 });
