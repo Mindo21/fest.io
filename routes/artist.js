@@ -27,6 +27,9 @@ router.post(
     addArtist   // add new artist
 );
 
+// DELETE requests
+router.delete('/:id', deleteArtist); // delete artist with id
+
 
 // functions
 // GET
@@ -54,6 +57,20 @@ async function addArtist(req, res) {
     } else {
         // request that accepts JSON will instead get the data
         res.json(artists);
+    }
+}
+
+// DELETE
+async function deleteArtist(req, res) {
+    try {
+        await db.deleteArtist(req.params.id);
+        res.sendStatus(200);
+    } catch (e) {
+        if (e.status === 'gone') {
+            res.sendStatus(410); // already gone
+        } else {
+            error(res, e);
+        }
     }
 }
 

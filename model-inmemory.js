@@ -168,6 +168,33 @@ function findNewId(arrayOfObjects) {
     return largest_id + 1;
 }
 
+const GONE = { status: 'gone' };
+
+async function deleteArtist(id) {
+    const index = artists.findIndex(a => a.id == id);
+    if (!index) {
+        throw GONE;
+    }
+    removedArtist = artists.splice(index, 1)[0];
+    const iconFileName = config.uploaded_img + id + "/" + removedArtist.icon;
+    // asynchronously delete the icon
+    try {
+        await unlinkAsync(iconFileName);
+    } catch (e) {
+        throw ['failed fs delete of ' + iconFileName, e];
+    }
+    const imgNames = removedArtist.images;
+    imgNames.forEach(async imgName => {
+        // asynchronously delete the img
+        try {
+            await unlinkAsync(config.uploaded_img + id + "/" + imgName);
+        } catch (e) {
+            throw ['failed fs delete of ' + config.uploaded_img + id + "/" + imgName, e];
+        }
+    })
+    console.log("artist with images removed (hopefully)");
+}
+
 module.exports = {
     getArtist: getArtist,
     getArtists: getArtists,
@@ -177,4 +204,6 @@ module.exports = {
 
     addArtist: addArtist,
     addStage: addStage,
+
+    deleteArtist: deleteArtist,
 }

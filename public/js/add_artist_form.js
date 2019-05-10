@@ -60,7 +60,7 @@ async function generateArtistForm(artistListItem) {
     inputNameLabel.setAttribute("for", "name");
     inputNameLabel.appendChild(document.createTextNode("Name:"));
     fieldSet.appendChild(inputNameLabel);
-    
+
     const inputName = document.createElement('input');
     inputName.setAttribute("type", "text");
     inputName.setAttribute("name", "name");
@@ -113,7 +113,7 @@ async function generateArtistForm(artistListItem) {
     fieldSet.appendChild(inputDescription);
 
     // legend for the selection of stage
-    
+
     const legend2 = document.createElement('legend');
     fieldSet.appendChild(legend2);
     const span2 = document.createElement('span');
@@ -167,7 +167,7 @@ async function generateArtistForm(artistListItem) {
     linkToAddNewStage.setAttribute("onclick", "goToAddNewStage()");
     linkToAddNewStage.appendChild(document.createTextNode("Or add a new stage..."));
     fieldSet.appendChild(linkToAddNewStage);
-    
+
     // StartTime and EndTime
     const inputStartTimeSection = document.createElement('section');
     inputStartTimeSection.classList.add("timepickerSection");
@@ -301,7 +301,7 @@ async function generateArtistForm(artistListItem) {
     // images (showing the images)
     loadArtistImages(artist, uploadedImgSection, fileInputWrapper);
 
-    // Apply and Cancel buttons
+    // Apply and Delete and Cancel buttons
 
     const btnsSection = document.createElement('section');
     btnsSection.setAttribute("id", "btnsSection");
@@ -312,6 +312,16 @@ async function generateArtistForm(artistListItem) {
     inputApply.setAttribute("value", "Apply");
     inputApply.setAttribute("id", "applyBtn");
     btnsSection.appendChild(inputApply);
+
+    // only for existing artist
+    if (invisibleInputId.value != "") {
+        const inputDelete = document.createElement('input');
+        inputDelete.setAttribute("type", "button");
+        inputDelete.setAttribute("value", "Delete");
+        inputDelete.setAttribute("id", "deleteBtn");
+        inputDelete.setAttribute("onclick", "artistDeleteClicked()");
+        btnsSection.appendChild(inputDelete);
+    }
 
     const inputCancel = document.createElement('input');
     inputCancel.setAttribute("type", "button");
@@ -404,7 +414,7 @@ async function addUploadedImg(input) {
 
 async function getArtistIcon(artist) {
     if (!artist) return defaultImg;
-    const response = await fetch('/img/' + artist.id + '/' + artist.icon);    
+    const response = await fetch('/img/' + artist.id + '/' + artist.icon);
     // if there is no icon found, return default image
     if (response.status != 200) {
         return defaultImg;
@@ -428,6 +438,13 @@ async function uploadArtist() {
     if (!response.ok) throw response;
     const artists = await response.json();
     return artists;
+}
+
+async function artistDeleteClicked() {
+    const id = document.getElementById('invisibleInputId').value;
+    console.log("deleting artist with id: ", id);
+    await fetch('/artist/' + id, { method: 'DELETE' });
+    init();
 }
 
 function artistCancelClicked() {
