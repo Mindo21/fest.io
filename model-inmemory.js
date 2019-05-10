@@ -11,7 +11,7 @@ const MAX_ID = 1000; // store up to 1000 artists/stages
 
 const artists = [
     {
-        id: 0,
+        id: 1,
         name: "Blue Zodiac",
         genre: "blues",
         description: "A band that plays blues",
@@ -22,7 +22,7 @@ const artists = [
         images: []
     },
     {
-        id: 1,
+        id: 2,
         name: "Fearless Flyers",
         genre: "funk",
         description: "We like to play on guitars only...",
@@ -33,7 +33,7 @@ const artists = [
         images: ["crab.jpg", "night.jpg", "landscape.jpg"]
     },
     {
-        id: 2,
+        id: 3,
         name: "Vulfpeck",
         genre: "funk",
         description: "Gangster band playing funk and hip hop only...",
@@ -45,10 +45,10 @@ const artists = [
     }
 ];
 const stages = [
-    // {
-    //     id: 0,
-    //     name: "Side Stage"
-    // }
+    {
+        id: 1,
+        name: "Side Stage"
+    }
 ];
 
 function getArtist(id) {
@@ -155,7 +155,7 @@ function addStage(newStage) {
 }
 
 function findNewId(arrayOfObjects) {
-    if (!arrayOfObjects || arrayOfObjects.length <= 0) return 0;
+    if (!arrayOfObjects || arrayOfObjects.length <= 0) return 1;
     const largest_id = Math.max(...arrayOfObjects.map(e => parseInt(e.id)));
     if (largest_id + 1 > MAX_ID) {
         // if the limit is reached, dont add artist

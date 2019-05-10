@@ -45,6 +45,7 @@ function sendArtist(req, res) {
 
 // POST
 async function addArtist(req, res) {
+    console.log("req.body: ", req.body);
     const artists = await db.addArtist(req.files, req.body);
     app.updateAllArtistsSocket(artists);
     if (req.accepts('html')) {

@@ -4,6 +4,7 @@ const socket = io();
 
 const stageName = document.getElementById('stageNameSpan');
 const artistName = document.getElementById('artistNameSpan');
+const artistNameHeader = document.getElementById('artistNameHeaderSpan');
 const artistImg = document.getElementById('artistImg');
 const scheduleList = document.getElementById('scheduleList');
 
@@ -11,10 +12,13 @@ const stageId = location.search.substring(1).split("=")[1]; // parameter in "/sc
 const artists = [];
 const defaultImg = "../img/default.jpg";
 const images = [defaultImg];
-const IMG_CHANGE_TIME = 3000;   // set to 3 seconds for now
+const IMG_CHANGE_TIME = 5000;   // set to 5 seconds for now
+const CURRENT_ARTIST_REFRESH_TIME = 60000   // set to 1 minute - checking for current artist every minute
 
 let currentArtist = null;
 let x = -1;
+let changingImages = false;
+let currentArtistHighlighted = false;
 
 function displayNextImage() {
     x = (x === images.length - 1) ? 0 : x + 1;
@@ -26,10 +30,23 @@ function displayPreviousImage() {
     artistImg.src = images[x];
 }
 
-function changeImages() {
+function displayDefaultImage() {
+    x = 0;
+    artistImg.src = images[x];
+}
+
+async function startChangingImages() {
+    if (!changingImages) changingImages = true;
     displayNextImage();
+    await getCurrentArtist();
     // wait IMG_CHANGE_TIME and then find the current artist again (which changes the image and so on)
-    setTimeout(getCurrentArtist, IMG_CHANGE_TIME);
+    if (currentArtist) setTimeout(startChangingImages, IMG_CHANGE_TIME);
+    else {
+        getCurrentArtistImages();
+        displayDefaultImage();
+        // after some period, check if there is any artist that is now up to perform
+        setTimeout(startChangingImages, CURRENT_ARTIST_REFRESH_TIME);
+    }
 }
 
 function getCurrentArtistImages() {
@@ -56,21 +73,59 @@ async function generateStageName(givenStageName) {
     }
 }
 
-function getCurrentArtist() {
+async function getCurrentArtist() {
     // find the artist locally by time
-    const now = new Date();
-    const currentTime = correctTime(now.getHours()) + ":" + correctTime(now.getMinutes());
+    const currentTime = getCurrentTime();
+    const previousArtist = currentArtist;
     currentArtist = artists.find((artist) => artist.startTime <= currentTime && artist.endTime >= currentTime);
     if (currentArtist) {
         // if there is an artist playing
-        artistName.textContent = currentArtist.name;
+        artistNameHeader.innerHTML = "Playing: <strong>" + currentArtist.name + "</strong>";
+        // load the artist's images
+        if (images.length <= 1 || previousArtist != currentArtist) {
+            getCurrentArtistImages();
+            if (!changingImages) startChangingImages();
+            if (!currentArtistHighlighted || previousArtist != currentArtist) {
+                if (previousArtist) {
+                    const previousScheduleItemArtist = document.getElementById(previousArtist.id);
+                    if (previousScheduleItemArtist) previousScheduleItemArtist.style.background = 'grey';
+                }
+                console.log("highlight artist with id: ", currentArtist.id);
+                const scheduleItemArtist = document.getElementById(currentArtist.id);
+                if (scheduleItemArtist) {
+                    scheduleItemArtist.style.background = 'green';
+                    currentArtistHighlighted = true;
+                } else {
+                    console.log("could not find artist list item for highlight");
+                }
+            }
+        }
     } else {
         // if there is no artist playing right now
-        artistName.textContent = "No artist playing right now...";
+        await updateSchedule();   // to clear the highlighted artist
+        // find the soonest artist to perform
+        const sortedArtists = artists.sort(function(a, b) {
+            var timeA = a.startTime;
+            var timeB = b.startTime;
+            if (timeA < timeB) {
+              return -1;
+            }
+            if (timeA > timeB) {
+              return 1;
+            }
+            // times must be equal
+            return 0;
+        });
+        const soonestArtist = sortedArtists.find(a => a.startTime > currentTime);
+        // display the soonest artist to perform
+        artistNameHeader.innerHTML = "Soon: " + soonestArtist.startTime + " - <strong>" + soonestArtist.name + "</strong>";
+        if (images.length != 1) getCurrentArtistImages();
     }
-    // load the artist's images
-    getCurrentArtistImages();
-    changeImages();     // start changing the images
+}
+
+function getCurrentTime() {
+    const now = new Date();
+    return correctTime(now.getHours()) + ":" + correctTime(now.getMinutes());
 }
 
 function correctTime(time) {
@@ -95,14 +150,30 @@ async function getAllArtists(artistsGiven) {
     }
 }
 
-function updateSchedule() {
+async function updateSchedule() {
     scheduleList.innerHTML = "";
+    currentArtistHighlighted = false;
     if (artists.length <= 0) {
         // if there are no artists
         addScheduleListItem();
     } else {
         // add each artist to the list
-        artists.forEach((artist) => addScheduleListItem(artist));
+        // sort them against start time
+        const sortedArtists = artists.sort(function(a, b) {
+            var timeA = a.startTime;
+            var timeB = b.startTime;
+            if (timeA < timeB) {
+              return -1;
+            }
+            if (timeA > timeB) {
+              return 1;
+            }
+            // times must be equal
+            return 0;
+        });
+        for (let artist of sortedArtists) {
+            await addScheduleListItem(artist);
+        }
     }
 }
 
@@ -112,13 +183,22 @@ async function addScheduleListItem(artist) {
         const icon = document.createElement("img");
         icon.classList.add("artistIcon");
         icon.src = await getArtistIcon(artist);
+        
         const name = document.createElement("span");
         name.classList.add("artistName");
         name.appendChild(document.createTextNode(artist.name));
 
+        const time = document.createElement("span");
+        time.classList.add("artistTime");
+        time.appendChild(document.createTextNode(artist.startTime + " - " + artist.endTime));
+
         const scheduleItem = document.createElement("li");
+        scheduleItem.setAttribute("id", artist.id);
+        // grey out the artists that already performed
+        if (artist.endTime < getCurrentTime()) scheduleItem.style.background = 'grey';
         scheduleItem.appendChild(icon);
         scheduleItem.appendChild(name);
+        scheduleItem.appendChild(time);
         scheduleList.appendChild(scheduleItem);
     } else {
         // if there is no artist
@@ -149,10 +229,9 @@ window.addEventListener('load', init);
 // SOCKET functions
 
 socket.on('UPDATE_ARTISTS', async (artists) => {
-    console.log('socket message received: ', artists);
     await getAllArtists(artists); // wait for the artists being loaded, then find the current artist
-    getCurrentArtist();
-    updateSchedule();
+    await updateSchedule();   // to clear the highlighted artist
+    if (!changingImages) startChangingImages();     // start changing the images
 });
 
 socket.on('UPDATE_STAGES', (stages) => {

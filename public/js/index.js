@@ -5,26 +5,6 @@ const btnAddStage = document.getElementById('btnAddStage');
 const artistsList = document.getElementById('artistsList');
 const stagesList = document.getElementById('stagesList');
 
-btnAddStage.addEventListener('click', async () => {
-    const newStage = {
-        id: 1,
-        name: "Main Stage"
-    }
-
-    // send the new stage to server
-    const response = await fetch('/stage', {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newStage)
-    });
-    if (!response.ok) throw response;
-    const stages = await response.json();
-
-    loadStages(stages);
-});
-
 async function addingNewArtist() {
     let existingForm = document.getElementById("addNewFormSection");
     if (existingForm) {

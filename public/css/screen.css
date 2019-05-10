@@ -1,24 +1,130 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: system-ui;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-flow: row wrap;
+    /* align-items: flex-start; */
+    /* justify-content: space-around; */
+}
+
+header {
+    height: calc(20vh - 0.6rem);
+    z-index: 3;
+    flex: 1 18 100%;
+
+    /* align-self: flex-start; */
+    padding: 0.3rem 3rem;
+    background: #4e004e;
+    box-shadow: 0px 5px 10px #0f0f0f;
+    opacity: 0.9;
+}
+
+#stageNameSpan {
+    width: auto;
+    height: auto;
+    color: white;
+    font-weight: lighter;
+    clear: left;
+    margin: 0 3rem;
+    font-size: 5rem;
+    text-align: center;
+}
+
+#artistNameHeaderSpan {
+    width: auto;
+    height: auto;
+    color: white;
+    font-weight: lighter;
+    margin: 0 3rem;
+    font-size: 3rem;
+    text-align: center;
+}
+
+
+#scheduleSection {
+    z-index: 2;
+    width: 20vw;
+    height: calc(80vh - 1rem);
+    order: 1;
+    background: rgb(238, 224, 237);
+    padding: 0.5rem 2rem;
+    text-align: center;
+    opacity: 0.9;
+    box-shadow: 5px 0px 10px #0f0f0f;
+}
+
+#scheduleSection #scheduleSpan {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+#scheduleSection #scheduleList {
+    margin: 1rem 0;
+    list-style: none;
+    border-radius: 0.3rem;
+    overflow: hidden;
+}
+
+#scheduleSection #scheduleList li {
+    background: white;
+    height: 100%;
+    padding: 0.5rem 2rem;
+    border: none;
+    text-decoration: none;
+    color: black;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+#scheduleSection #scheduleList li:nth-child(even) {
+    background: rgb(240, 240, 240);
+}
+
+#artistNameSpan {
+    z-index: 1;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: rgb(0, 0, 0);
+    font-weight: lighter;
+    font-size: 3rem;
+    text-align: center;
 }
 
 #stageSection {
     text-align: center;
 }
 
-#stageNameSpan {
-    font-size: 2rem;
-    margin: auto;
-}
-
 #artistSection {
+    z-index: -2;
+    width: 100%;
+    height: 100%;
     text-align: center;
+    position: absolute;
+    overflow: hidden;
 }
 
-#artistImg {
+/* #artistImg {
     width: 100%;
     height: auto;
+    transition: 1s ease-in;
+} */
+
+#artistSection > #artistImg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .artistIcon {
@@ -32,4 +138,35 @@
     height: auto;
     font-size: 1.2rem;
     margin: 0 1rem;
+}
+
+#scheduleSection section {
+    width: 100%;
+    display: block;
+    text-align: left;
+}
+
+#greyLegend div {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+    float: left;
+    border-radius: 100%;
+    background: grey;
+}
+#greenLegend div {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+    float: left;
+    border-radius: 100%;
+    background: green;
+}
+#whiteLegend div {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+    float: left;
+    border-radius: 100%;
+    background: white;
 }

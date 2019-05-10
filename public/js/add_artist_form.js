@@ -31,6 +31,13 @@ async function generateArtistForm(artistListItem) {
     addNewForm.setAttribute("method", "POST");
     addNewFormSection.appendChild(addNewForm);
 
+    // invisible input just to pass the artist's id to the form data
+    const divId = document.createElement('input');
+    divId.setAttribute("id", "invisibleInputId");
+    divId.setAttribute("name", "id");
+    if (artist) divId.setAttribute("value", artist.id);
+    addNewForm.appendChild(divId);
+
     // everything is in the fieldset except buttons
 
     const fieldSet = document.createElement("fieldset");
@@ -65,6 +72,10 @@ async function generateArtistForm(artistListItem) {
     // load the artist name into input
     if (artist) inputName.setAttribute("value", artist.name);
     fieldSet.appendChild(inputName);
+
+    // focus on the name
+    inputName.focus();
+    inputName.select();
 
     // input the genre for artist
     const inputGenreLabel = document.createElement('label');
@@ -153,6 +164,7 @@ async function generateArtistForm(artistListItem) {
     const linkToAddNewStage = document.createElement('a');
     linkToAddNewStage.setAttribute("id", "linkToAddNewStage");
     linkToAddNewStage.setAttribute("href", "#stagesSection");
+    linkToAddNewStage.setAttribute("onclick", "goToAddNewStage()");
     linkToAddNewStage.appendChild(document.createTextNode("Or add a new stage..."));
     fieldSet.appendChild(linkToAddNewStage);
     
@@ -211,7 +223,7 @@ async function generateArtistForm(artistListItem) {
     // legend for Images
 
     const legend3 = document.createElement('legend');
-    addNewForm.appendChild(legend3);
+    fieldSet.appendChild(legend3);
     const span3 = document.createElement('span');
     span3.classList.add('number');
     span3.appendChild(document.createTextNode('3'));
@@ -291,18 +303,27 @@ async function generateArtistForm(artistListItem) {
 
     // Apply and Cancel buttons
 
+    const btnsSection = document.createElement('section');
+    btnsSection.setAttribute("id", "btnsSection");
+    addNewForm.appendChild(btnsSection);
+
     const inputApply = document.createElement('input');
     inputApply.setAttribute("type", "submit");
     inputApply.setAttribute("value", "Apply");
     inputApply.setAttribute("id", "applyBtn");
-    addNewForm.appendChild(inputApply);
+    btnsSection.appendChild(inputApply);
 
     const inputCancel = document.createElement('input');
     inputCancel.setAttribute("type", "button");
     inputCancel.setAttribute("value", "Cancel");
     inputCancel.setAttribute("id", "cancelBtn");
     inputCancel.setAttribute("onclick", "artistCancelClicked()");
-    addNewForm.appendChild(inputCancel);
+    btnsSection.appendChild(inputCancel);
+}
+
+function goToAddNewStage() {
+    addingNewStage();
+    return true;
 }
 
 async function loadArtistIcon(artist) {
@@ -311,15 +332,29 @@ async function loadArtistIcon(artist) {
 }
 
 async function addUploadedIcon(input) {
-    const id = input.parentElement.parentElement.parentElement.parentElement.id;
-    const artists = await uploadArtist(id);
-    const artist = artists.find(a => a.id == id);
+    const artists = await uploadArtist();
+    const invisibleInputId = document.getElementById('invisibleInputId');
+    const id = invisibleInputId.value;
+    let artist;
+    if (id == "") {
+        // there was a new artist added -> must be the last one
+        artist = artists[artists.length-1];
+        invisibleInputId.value = artist.id; // set the id to the invisible input
+        invisibleInputId.parentElement.setAttribute("id", artist.id);   // set the id of the form
+    } else {
+        // an existing artist was updated
+        artist = artists.find(a => a.id == id);
+    }
+    console.log("artists returned after upload: ", artists);
+    console.log("artist id: ", id);
+
     // images (showing the images)
     loadArtistIcon(artist);
     input.value = "";
 }
 
 function loadArtistImages(artist, parentEl, nextChild) {
+    console.log("loading artist images... artist: ", artist);
     // erase the images
     const noImgSpan = document.querySelector(".noImgSpan");
     if (noImgSpan) noImgSpan.remove();
@@ -347,10 +382,21 @@ function loadArtistImages(artist, parentEl, nextChild) {
 async function addUploadedImg(input) {
     const uploadedImgSection = document.querySelector(".uploadedImgSection");
     const fileInputWrapper = document.querySelector(".fileInputWrapper");
-    const id = input.parentElement.parentElement.parentElement.id;
-
-    const artists = await uploadArtist(id);
-    const artist = artists.find(a => a.id == id);
+    const artists = await uploadArtist();
+    const invisibleInputId = document.getElementById('invisibleInputId');
+    const id = invisibleInputId.value;
+    let artist;
+    if (id == "") {
+        // there was a new artist added -> must be the last one
+        artist = artists[artists.length-1];
+        invisibleInputId.value = artist.id; // set the id to the invisible input
+        invisibleInputId.parentElement.setAttribute("id", artist.id);   // set the id of the form
+    } else {
+        // an existing artist was updated
+        artist = artists.find(a => a.id == id);
+    }
+    console.log("artists returned after upload: ", artists);
+    console.log("artist id: ", id);
     // images (showing the images)
     loadArtistImages(artist, uploadedImgSection, fileInputWrapper);
     input.value = "";
@@ -367,11 +413,10 @@ async function getArtistIcon(artist) {
     return '/img/' + artist.id + '/' + artist.icon;
 }
 
-async function uploadArtist(id) {
+async function uploadArtist() {
     const form = document.forms[0]; // there should always be only one
     const data = new FormData(form);
-    data.append('id', id);  // appends the artistId or empty string "", server will deal with it
-    console.log("form data: ", data);
+    //data.append('id', id);  // appends the artistId or empty string "", server will deal with it
 
     const response = await fetch('/artist', {
         method: 'POST',

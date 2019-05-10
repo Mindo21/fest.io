@@ -6,18 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-
-    <section id="stageSection">
+    <header>
         <span id="stageNameSpan"></span>
+        <span id="artistNameHeaderSpan"></span>
+    </header>
+
+    <section id="scheduleSection">
+        <section id="greyLegend"><div></div> <span id="performedSpan">Has performed</span></section>
+        <section id="greenLegend"> <div></div> <span id="performingSpan">Performing</span></section>
+        <section id="whiteLegend"><div></div> <span id="upcomingSpan">Upcoming</span></section>
+        <span id="scheduleSpan">LineUp:</span>
+        <ul id="scheduleList"></ul>
     </section>
 
     <section id="artistSection">
-      <span id="artistNameSpan"></span>
-      <img id="artistImg" src="./img/default.jpg"/>
-    </section>
-
-    <section id="scheduleSection">
-      <ul id="scheduleList"></ul>
+        <img id="artistImg" src="./img/default.jpg"/>
     </section>
 
     <!-- I am using socket.io - I need to import the client-side JS code in here: -->

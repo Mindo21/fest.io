@@ -31,6 +31,12 @@ async function generateStageForm(stageListItem) {
     addNewForm.setAttribute("method", "POST");
     addNewFormSection.appendChild(addNewForm);
 
+    const divId = document.createElement('input');
+    divId.setAttribute("id", "invisibleInputId");
+    divId.setAttribute("name", "id");
+    if (stage) divId.setAttribute("value", stage.id);
+    addNewForm.appendChild(divId);
+
     // everything is in the fieldset except buttons
 
     const fieldSet = document.createElement("fieldset");
@@ -66,20 +72,28 @@ async function generateStageForm(stageListItem) {
     if (stage) inputName.setAttribute("value", stage.name);
     fieldSet.appendChild(inputName);
 
+    // focus on the name
+    inputName.focus();
+    inputName.select();
+
     // Apply and Cancel buttons
+
+    const btnsSection = document.createElement('section');
+    btnsSection.setAttribute("id", "btnsSection");
+    addNewForm.appendChild(btnsSection);
 
     const inputApply = document.createElement('input');
     inputApply.setAttribute("type", "submit");
     inputApply.setAttribute("value", "Apply");
     inputApply.setAttribute("id", "applyBtn");
-    addNewForm.appendChild(inputApply);
+    btnsSection.appendChild(inputApply);
 
     const inputCancel = document.createElement('input');
     inputCancel.setAttribute("type", "button");
     inputCancel.setAttribute("value", "Cancel");
     inputCancel.setAttribute("id", "cancelBtn");
     inputCancel.setAttribute("onclick", "stageCancelClicked()");
-    addNewForm.appendChild(inputCancel);
+    btnsSection.appendChild(inputCancel);
 }
 
 function stageCancelClicked() {
