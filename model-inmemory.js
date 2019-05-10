@@ -175,21 +175,24 @@ async function deleteArtist(id) {
     if (!index) {
         throw GONE;
     }
-    removedArtist = artists.splice(index, 1)[0];
+    const removedArtist = artists.splice(index, 1)[0];
+    console.log("removedArtist: ", removedArtist);
     const iconFileName = config.uploaded_img + id + "/" + removedArtist.icon;
     // asynchronously delete the icon
     try {
+        console.log("unlinking the icon");
         await unlinkAsync(iconFileName);
     } catch (e) {
-        throw ['failed fs delete of ' + iconFileName, e];
+        //throw ['failed fs delete of ' + iconFileName, e];
     }
     const imgNames = removedArtist.images;
     imgNames.forEach(async imgName => {
         // asynchronously delete the img
         try {
+            console.log("unlinking the img");
             await unlinkAsync(config.uploaded_img + id + "/" + imgName);
         } catch (e) {
-            throw ['failed fs delete of ' + config.uploaded_img + id + "/" + imgName, e];
+            //throw ['failed fs delete of ' + config.uploaded_img + id + "/" + imgName, e];
         }
     })
     console.log("artist with images removed (hopefully)");

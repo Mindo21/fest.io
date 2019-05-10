@@ -69,7 +69,7 @@ async function deleteArtist(req, res) {
         if (e.status === 'gone') {
             res.sendStatus(410); // already gone
         } else {
-            error(res, e);
+            res.sendStatus(500);
         }
     }
 }

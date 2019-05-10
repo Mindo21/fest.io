@@ -116,13 +116,13 @@
 	background: none;
 }
 
-#applyBtn, #cancelBtn
+#applyBtn, #deleteBtn, #cancelBtn
 {
-	width: 40%;
+	width: 20%;
 	clear: left;
 	padding: 19px 39px 18px 39px;
 	color: #FFF;
-	margin: 0 5%;
+	margin: 0 2%;
 	background: rgb(145, 24, 145);
 	font-size: 1rem;
 	text-align: center;
@@ -133,9 +133,14 @@
     border-radius: 0.3rem;
 	margin-bottom: 10px;
 }
-#cancelBtn {
+#deleteBtn {
     background: rgb(206, 36, 36);
     border: 1px solid rgb(165, 12, 12);
+    border-width: 1px 1px 3px;
+}
+#cancelBtn {
+    background: rgb(36, 110, 206);
+    border: 1px solid rgb(12, 79, 167);
     border-width: 1px 1px 3px;
 }
 #applyBtn:hover
@@ -143,8 +148,11 @@
     cursor: pointer;
 	background: rgb(95, 0, 95);
 }
-
-#cancelBtn:hover {
+#deleteBtn:hover {
     cursor: pointer;
     background: rgb(100, 3, 3);
+}
+#cancelBtn:hover {
+    cursor: pointer;
+    background: rgb(1, 41, 92);
 }
