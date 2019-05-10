@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const PORT = process.env.PORT || "8080";
 
 // utils
 const config = require('./config.js');
@@ -56,7 +57,7 @@ function updateStagesSocket(stages) {
 }
 
 // server.listen() instead of app.listen(), because I am using socket.io
-server.listen(8080, (err) => {
+server.listen(PORT, (err) => {
     if (err) console.error('error starting server: ', err);
-    else console.log('server started, listening on port 8080...');
+    else console.log('server started, listening on port ' + PORT);
 });
