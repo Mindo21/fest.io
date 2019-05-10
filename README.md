@@ -1,76 +1,44 @@
 # fest.io
-======
 
 fest.io - a client-server application helping festivals all around the globe.
+A web-application, with which a creator of any one day festival can inform audience about what is about to happen, and beautify the overall experience of the performances.
 
 Features
 --------
-1.
+Things to do on the device:
+
+1. Click on an artist to see/edit their details. (If edited, the changes are shown in real time on stage screen or the device...)
+2. Click on a stage to be redirected to the stage screen (or you might copy the link and open it in any other browser).
+3. Add a new artist, while giving a lot of useful information (Name, Genre, Stage they are on, Times, Icon, Images to be shown at the stage...).
+4. Add a new stage...
+
+Things that are shown on the stage screens:
+
+1. The LineUp of the day - names of the artists, their performance times, their uploaded icons...
+2. The progress of the day - showing which artists have already performed, which ones are performing at the moment and which ones will be performing soon.
+3. Slideshow of images sent by artists - during their performance, their photos will be shown to set the mood, as well as informing audience with all the other stuff shown.
+4. Name of the stage (in case the audience is lost);
 
 
-Running JStagram
+Running fest.io
 ----------------
 
 To get the example running, you must install the source code and all modules and then run the server from the command line:
+It will run on port 8080.
 
-1. To download the code, either use git (the simplest option):
-
-  ```bash
-  git clone https://github.com/portsoc/ws_api.git
-  cd ws_api
-  ```
-  or download and unpack the [zip](https://github.com/portsoc/ws_api/archive/master.zip)
-  which on linux can be achieved using
-  ```bash
-  wget https://github.com/portsoc/ws_api/archive/master.zip
-  ```
-  then
-  ```bash
-  unzip master.zip
-  cd ws_api-master
-  ```
-
-2. To download any libraries the code uses, type:
+1. To download any libraries the code uses, type:
 
   ```bash
   npm install
   ```
 
-3. Start the server by typing:
+2. Start the server by typing:
 
   ```bash
   npm start
   ```
 
-4. Visit your website.
-    * If you're on your VM you just need to put your VM's IP address into a browser, or if you're developing on a desktop machine it will be http://127.0.0.1:8080 .
+Additional info
+---------------
 
-
-Running JStagram with a database
---------------------------------
-
-1. Do the first two steps above
-
-2. Change the mention of `model-inmemory` to `model-mysql` in `server.js`.
-
-3. Install and run MySQL.
-    * If you're using your VM for this, MySQL is already installed and running.
-
-4. Edit `jstagram/config.json` so that your database `host`, `user` and `password` properties are correct.
-    * The defaults should work on your VM.
-
-5. Install the database and tables using: `npm run initsql`
-    * If your `host` and `user` differ from the defaults, you may need to update `package.json` for the `initsql` script to work.
-
-6. Start the server by typing:
-
-  ```bash
-  npm start
-  ```
-
-7. Visit your website.
-    * If you're on your VM you just need to put your VM's IP address into a browser, or if you're developing on a desktop machine it will be http://127.0.0.1:8080 .
-
-Git: A recommendation
-----------------------
-If at all possible, we recommend you use git to download code rather than zips of a repository.  This is preferable because if the repo is updated, then syncing those changes requires just one command (`git pull`) and usually any merging can be done automatically.  Git is very powerful and we heartily encourages you to become familiar with it.
+The stage screens are connected through websocket to the server, in order to react to changes from the organiser's device in real-time.
