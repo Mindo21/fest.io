@@ -49,177 +49,245 @@ async function generateArtistForm(artistListItem) {
     legend1.appendChild(document.createTextNode(newArtistText));
 
     // input the name of the artist
-
+    const inputNameLabel = document.createElement('label');
+    inputNameLabel.setAttribute("for", "name");
+    inputNameLabel.appendChild(document.createTextNode("Name:"));
+    fieldSet.appendChild(inputNameLabel);
+    
     const inputName = document.createElement('input');
     inputName.setAttribute("type", "text");
     inputName.setAttribute("name", "name");
+    inputName.setAttribute("id", "name");
     inputName.setAttribute("placeholder", "Artist Name");
-    inputName.setAttribute("pattern", "\\S[A-Za-z0-9]*");
-    inputName.setAttribute("title", "Username should only contain lowercase letters. e.g. john");
+    inputName.setAttribute("pattern", "\\S[A-Za-z0-9 ]*");
+    inputName.setAttribute("title", "The name has to be words made from characters a-Z or numbers, e.g. Bruno Mars");
     inputName.setAttribute("required", "");
     // load the artist name into input
     if (artist) inputName.setAttribute("value", artist.name);
     fieldSet.appendChild(inputName);
 
-    // // input the genre for artist
+    // input the genre for artist
+    const inputGenreLabel = document.createElement('label');
+    inputGenreLabel.setAttribute("for", "genre");
+    inputGenreLabel.appendChild(document.createTextNode("Genre:"));
+    fieldSet.appendChild(inputGenreLabel);
 
-    // const inputGenre = document.createElement('input');
-    // inputGenre.setAttribute("type", "text");
-    // inputGenre.setAttribute("name", "genre");
-    // inputGenre.setAttribute("placeholder", "Genre");
-    // // load the artist genre into input
-    // if (artist) inputGenre.setAttribute("value", artist.genre);
-    // fieldSet.appendChild(inputGenre);
+    const inputGenre = document.createElement('input');
+    inputGenre.setAttribute("type", "text");
+    inputGenre.setAttribute("name", "genre");
+    inputGenre.setAttribute("id", "genre");
+    inputGenre.setAttribute("placeholder", "Genre");
+    inputGenre.setAttribute("pattern", "\\S.*");
+    inputGenre.setAttribute("title", "The genre has to start with a non-space character, e.g. R&B");
+    inputGenre.setAttribute("required", "");
+    // load the artist genre into input
+    if (artist) inputGenre.setAttribute("value", artist.genre);
+    fieldSet.appendChild(inputGenre);
 
-    // // input the description for artist
+    // input the description for artist
+    const inputDescLabel = document.createElement('label');
+    inputDescLabel.setAttribute("for", "description");
+    inputDescLabel.appendChild(document.createTextNode("Short Description:"));
+    fieldSet.appendChild(inputDescLabel);
 
-    // const inputDescription = document.createElement('textarea');
-    // inputDescription.setAttribute("name", "description");
-    // inputDescription.setAttribute("placeholder", "Short Description");
-    // // load the artist description into input
-    // if (artist) inputDescription.appendChild(document.createTextNode(artist.description));
-    // fieldSet.appendChild(inputDescription);
+    const inputDescription = document.createElement('textarea');
+    inputDescription.setAttribute("name", "description");
+    inputDescription.setAttribute("id", "description");
+    inputDescription.setAttribute("placeholder", "Short Description");
+    inputDescription.setAttribute("pattern", "\\S.*");
+    inputDescription.setAttribute("title", "The description has to start with a non-space character, e.g. This is a rock-band.");
+    inputDescription.setAttribute("required", "");
+    // load the artist description into input
+    if (artist) inputDescription.appendChild(document.createTextNode(artist.description));
+    fieldSet.appendChild(inputDescription);
 
-    // // legend for the selection of stage
+    // legend for the selection of stage
     
-    // const legend2 = document.createElement('legend');
-    // fieldSet.appendChild(legend2);
-    // const span2 = document.createElement('span');
-    // span2.classList.add('number');
-    // span2.appendChild(document.createTextNode('2'));
-    // legend2.appendChild(span2);
-    // legend2.appendChild(document.createTextNode('Stage'));
+    const legend2 = document.createElement('legend');
+    fieldSet.appendChild(legend2);
+    const span2 = document.createElement('span');
+    span2.classList.add('number');
+    span2.appendChild(document.createTextNode('2'));
+    legend2.appendChild(span2);
+    legend2.appendChild(document.createTextNode('Stage'));
 
-    // // option group - select the Stage
+    // option group - select the Stage
+    const stageSelectionLabel = document.createElement('label');
+    stageSelectionLabel.setAttribute("for", "stageSelection");
+    stageSelectionLabel.appendChild(document.createTextNode("Select the Stage, where the Artist will perform:"));
+    fieldSet.appendChild(stageSelectionLabel);
 
-    // const stageSelection = document.createElement('select');
-    // stageSelection.setAttribute("id", "stageSelection");
-    // stageSelection.setAttribute("name", "stageName");
-    // fieldSet.appendChild(stageSelection);
-    // const optGroup = document.createElement('optgroup');
-    // optGroup.setAttribute("label", "Stages");
-    // stageSelection.appendChild(optGroup);
+    const stageSelection = document.createElement('select');
+    stageSelection.setAttribute("id", "stageSelection");
+    stageSelection.setAttribute("name", "stageId");
+    stageSelection.setAttribute("pattern", ".*");
+    stageSelection.setAttribute("title", "It has to be an existing stage, select from the list or create a new one.");
+    stageSelection.setAttribute("required", "");
+    fieldSet.appendChild(stageSelection);
+    const optGroup = document.createElement('optgroup');
+    optGroup.setAttribute("label", "Stages");
+    stageSelection.appendChild(optGroup);
 
-    // // load stages into the option group
-    // const stages = await loadStages();
-    // stages.forEach((stage) => {
-    //     const option = document.createElement("option");
-    //     option.setAttribute("value", stage.id);
-    //     option.appendChild(document.createTextNode(stage.name));
-    //     // load the artist stageId into selection input
-    //     if (artist && artist.stageId == stage.id) option.setAttribute("selected", "selected");
-    //     optGroup.appendChild(option);
-    // });
+    // load stages into the option group
+    const stages = await loadStages();
+    if (stages && stages.length <= 0) {
+        // if there are no stages
+        const option = document.createElement("option");
+        option.setAttribute("value", "-1");
+        option.appendChild(document.createTextNode("There are no stages yet..."));
+        option.setAttribute("disabled", "");
+        optGroup.appendChild(option);
+    } else if (stages) {
+        // list the loaded stages in options
+        stages.forEach((stage) => {
+            const option = document.createElement("option");
+            option.setAttribute("value", stage.id);
+            option.appendChild(document.createTextNode(stage.name));
+            // load the artist stageId into selection input
+            if (artist && artist.stageId == stage.id) option.setAttribute("selected", "");
+            optGroup.appendChild(option);
+        });
+    }
 
-    // // StartTime and EndTime
+    // if they want to add a new stage
+    const linkToAddNewStage = document.createElement('a');
+    linkToAddNewStage.setAttribute("id", "linkToAddNewStage");
+    linkToAddNewStage.setAttribute("href", "#stagesSection");
+    linkToAddNewStage.appendChild(document.createTextNode("Or add a new stage..."));
+    fieldSet.appendChild(linkToAddNewStage);
+    
+    // StartTime and EndTime
+    const inputStartTimeSection = document.createElement('section');
+    inputStartTimeSection.classList.add("timepickerSection");
+    fieldSet.appendChild(inputStartTimeSection);
 
-    // const inputStartTime = document.createElement('input');
-    // inputStartTime.setAttribute("type", "text");
-    // inputStartTime.setAttribute("name", "startTime");
-    // inputStartTime.setAttribute("placeholder", "Start Time");
-    // inputStartTime.setAttribute("required", "");
-    // // load the artist startTime into input
-    // if (artist) inputStartTime.setAttribute("value", artist.startTime);
-    // inputStartTime.classList.add("timepicker");
-    // fieldSet.appendChild(inputStartTime);
+    const inputStartTimeLabel = document.createElement('label');
+    inputStartTimeLabel.setAttribute("for", "startTime");
+    inputStartTimeLabel.appendChild(document.createTextNode("The start of the Artist's performance:"));
+    inputStartTimeSection.appendChild(inputStartTimeLabel);
 
-    // const inputEndTime = document.createElement('input');
-    // inputEndTime.setAttribute("type", "text");
-    // inputEndTime.setAttribute("name", "endTime");
-    // inputEndTime.setAttribute("placeholder", "End Time");
-    // inputEndTime.setAttribute("required", "");
-    // // load the artist endTime into input
-    // if (artist) inputEndTime.setAttribute("value", artist.endTime);
-    // inputEndTime.classList.add("timepicker");
-    // fieldSet.appendChild(inputEndTime);
+    const inputStartTime = document.createElement('input');
+    inputStartTime.setAttribute("type", "text");
+    inputStartTime.setAttribute("name", "startTime");
+    inputStartTime.setAttribute("id", "startTime");
+    inputStartTime.setAttribute("placeholder", "Start Time");
+    stageSelection.setAttribute("pattern", "[0-9][0-9]:[0-9][0-9]");
+    stageSelection.setAttribute("title", "It has to be a time (hh:mm), e.g. 17:45");
+    inputStartTime.setAttribute("required", "");
+    // load the artist startTime into input
+    if (artist) inputStartTime.setAttribute("value", artist.startTime);
+    inputStartTime.classList.add("timepicker");
+    inputStartTimeSection.appendChild(inputStartTime);
 
-    // // using materialize's timepicker
-    // const timePickers = M.Timepicker.init(document.querySelectorAll('.timepicker'), {
-    //     twelveHour: false,
-    //     autoClose: true,
-    //     defaultTime: 'now'
-    // });
+    const inputEndTimeSection = document.createElement('section');
+    inputEndTimeSection.classList.add("timepickerSection");
+    fieldSet.appendChild(inputEndTimeSection);
 
-    // // legend for Images
+    const inputEndTimeLabel = document.createElement('label');
+    inputEndTimeLabel.setAttribute("for", "endTime");
+    inputEndTimeLabel.appendChild(document.createTextNode("The end of the Artist's performance:"));
+    inputEndTimeSection.appendChild(inputEndTimeLabel);
 
-    // const legend3 = document.createElement('legend');
-    // addNewForm.appendChild(legend3);
-    // const span3 = document.createElement('span');
-    // span3.classList.add('number');
-    // span3.appendChild(document.createTextNode('3'));
-    // legend3.appendChild(span3);
-    // legend3.appendChild(document.createTextNode('Images'));
+    const inputEndTime = document.createElement('input');
+    inputEndTime.setAttribute("type", "text");
+    inputEndTime.setAttribute("name", "endTime");
+    inputEndTime.setAttribute("id", "endTime");
+    inputEndTime.setAttribute("placeholder", "End Time");
+    stageSelection.setAttribute("pattern", "[0-9][0-9]:[0-9][0-9]");
+    stageSelection.setAttribute("title", "It has to be a time (hh:mm), e.g. 17:45");
+    inputEndTime.setAttribute("required", "");
+    // load the artist endTime into input
+    if (artist) inputEndTime.setAttribute("value", artist.endTime);
+    inputEndTime.classList.add("timepicker");
+    inputEndTimeSection.appendChild(inputEndTime);
 
-    // // upload one icon image
+    // using materialize's timepicker
+    const timePickers = M.Timepicker.init(document.querySelectorAll('.timepicker'), {
+        twelveHour: false,
+        autoClose: true,
+        defaultTime: 'now'
+    });
 
-    // // icon section
-    // const uploadedIconSection = document.createElement('section');
-    // uploadedIconSection.classList.add('uploadedIconSection');
-    // addNewForm.appendChild(uploadedIconSection);
-    // // icon label
-    // const uploadedIconSpan = document.createElement('h4');
-    // uploadedIconSpan.classList.add('uploadedIconSpan');
-    // uploadedIconSpan.appendChild(document.createTextNode('Icon:'));
-    // uploadedIconSection.appendChild(uploadedIconSpan);
-    // // icon image (showing the icon)
-    // const iconShape = document.createElement('div');    // iconShape to crop the icon
-    // iconShape.classList.add('iconShape');
-    // uploadedIconSection.appendChild(iconShape);
-    // const icon = document.createElement('img');
-    // icon.alt = 'icon';
-    // icon.classList.add('uploadedIcon');
-    // iconShape.appendChild(icon);
-    // // input (choose file) - button visible, input invisible because of layout problems
-    // const fileIconInputWrapper = document.createElement('div');
-    // fileIconInputWrapper.classList.add("fileIconInputWrapper");
-    // uploadedIconSection.appendChild(fileIconInputWrapper);
-    // // button that is visible
-    // const btnIconFile = document.createElement('div');
-    // btnIconFile.classList.add("btnImgFile");
-    // btnIconFile.appendChild(document.createTextNode("Upload an Icon"));
-    // fileIconInputWrapper.appendChild(btnIconFile);
-    // // input element hidden behind the button
-    // const inputIconFile = document.createElement('input');
-    // inputIconFile.setAttribute("type", "file");
-    // inputIconFile.setAttribute("name", "iconFile");
-    // inputIconFile.setAttribute("accept", "image/*");
-    // inputIconFile.setAttribute("onchange", "addUploadedIcon(this)");
-    // fileIconInputWrapper.appendChild(inputIconFile);
+    // legend for Images
 
-    // // load the icon image
-    // loadArtistIcon(artist);
+    const legend3 = document.createElement('legend');
+    addNewForm.appendChild(legend3);
+    const span3 = document.createElement('span');
+    span3.classList.add('number');
+    span3.appendChild(document.createTextNode('3'));
+    legend3.appendChild(span3);
+    legend3.appendChild(document.createTextNode('Images'));
 
-    // // upload multiple images
+    // upload one icon image
 
-    // // images section
-    // const uploadedImgSection = document.createElement('section');
-    // uploadedImgSection.classList.add('uploadedImgSection');
-    // addNewForm.appendChild(uploadedImgSection);
-    // // images label
-    // const uploadedImgSpan = document.createElement('h4');
-    // uploadedImgSpan.classList.add('uploadedImgSpan');
-    // uploadedImgSpan.appendChild(document.createTextNode('Images:'));
-    // uploadedImgSection.appendChild(uploadedImgSpan);
-    // // input (choose files) - button visible, input invisible because of layout problems
-    // const fileInputWrapper = document.createElement('div');
-    // fileInputWrapper.classList.add("fileInputWrapper");
-    // uploadedImgSection.appendChild(fileInputWrapper);
-    // // button that is visible
-    // const btnImgFile = document.createElement('div');
-    // btnImgFile.classList.add("btnImgFile");
-    // btnImgFile.appendChild(document.createTextNode("Upload Images"));
-    // fileInputWrapper.appendChild(btnImgFile);
-    // // input element hidden behind the button
-    // const inputImgFile = document.createElement('input');
-    // inputImgFile.setAttribute("type", "file");
-    // inputImgFile.setAttribute("name", "imgFile");
-    // inputImgFile.setAttribute("accept", "image/*");
-    // inputImgFile.setAttribute("onchange", "addUploadedImg(this)");
-    // inputImgFile.setAttribute("multiple", "");
-    // fileInputWrapper.appendChild(inputImgFile);
+    // icon section
+    const uploadedIconSection = document.createElement('section');
+    uploadedIconSection.classList.add('uploadedIconSection');
+    addNewForm.appendChild(uploadedIconSection);
+    // icon label
+    const uploadedIconSpan = document.createElement('h4');
+    uploadedIconSpan.classList.add('uploadedIconSpan');
+    uploadedIconSpan.appendChild(document.createTextNode('Icon:'));
+    uploadedIconSection.appendChild(uploadedIconSpan);
+    // icon image (showing the icon)
+    const iconShape = document.createElement('div');    // iconShape to crop the icon
+    iconShape.classList.add('iconShape');
+    uploadedIconSection.appendChild(iconShape);
+    const icon = document.createElement('img');
+    icon.alt = 'icon';
+    icon.classList.add('uploadedIcon');
+    iconShape.appendChild(icon);
+    // input (choose file) - button visible, input invisible because of layout problems
+    const fileIconInputWrapper = document.createElement('div');
+    fileIconInputWrapper.classList.add("fileIconInputWrapper");
+    uploadedIconSection.appendChild(fileIconInputWrapper);
+    // button that is visible
+    const btnIconFile = document.createElement('div');
+    btnIconFile.classList.add("btnImgFile");
+    btnIconFile.appendChild(document.createTextNode("Upload an Icon"));
+    fileIconInputWrapper.appendChild(btnIconFile);
+    // input element hidden behind the button
+    const inputIconFile = document.createElement('input');
+    inputIconFile.setAttribute("type", "file");
+    inputIconFile.setAttribute("name", "iconFile");
+    inputIconFile.setAttribute("accept", "image/*");
+    inputIconFile.setAttribute("onchange", "addUploadedIcon(this)");
+    fileIconInputWrapper.appendChild(inputIconFile);
 
-    // // images (showing the images)
-    // loadArtistImages(artist, uploadedImgSection, fileInputWrapper);
+    // load the icon image
+    loadArtistIcon(artist);
+
+    // upload multiple images
+
+    // images section
+    const uploadedImgSection = document.createElement('section');
+    uploadedImgSection.classList.add('uploadedImgSection');
+    addNewForm.appendChild(uploadedImgSection);
+    // images label
+    const uploadedImgSpan = document.createElement('h4');
+    uploadedImgSpan.classList.add('uploadedImgSpan');
+    uploadedImgSpan.appendChild(document.createTextNode('Images:'));
+    uploadedImgSection.appendChild(uploadedImgSpan);
+    // input (choose files) - button visible, input invisible because of layout problems
+    const fileInputWrapper = document.createElement('div');
+    fileInputWrapper.classList.add("fileInputWrapper");
+    uploadedImgSection.appendChild(fileInputWrapper);
+    // button that is visible
+    const btnImgFile = document.createElement('div');
+    btnImgFile.classList.add("btnImgFile");
+    btnImgFile.appendChild(document.createTextNode("Upload Images"));
+    fileInputWrapper.appendChild(btnImgFile);
+    // input element hidden behind the button
+    const inputImgFile = document.createElement('input');
+    inputImgFile.setAttribute("type", "file");
+    inputImgFile.setAttribute("name", "imgFile");
+    inputImgFile.setAttribute("accept", "image/*");
+    inputImgFile.setAttribute("onchange", "addUploadedImg(this)");
+    inputImgFile.setAttribute("multiple", "");
+    fileInputWrapper.appendChild(inputImgFile);
+
+    // images (showing the images)
+    loadArtistImages(artist, uploadedImgSection, fileInputWrapper);
 
     // Apply and Cancel buttons
 
@@ -227,7 +295,6 @@ async function generateArtistForm(artistListItem) {
     inputApply.setAttribute("type", "submit");
     inputApply.setAttribute("value", "Apply");
     inputApply.setAttribute("id", "applyBtn");
-    inputApply.setAttribute("onclick", "artistApplyClicked(this.parentElement.id)");
     addNewForm.appendChild(inputApply);
 
     const inputCancel = document.createElement('input');
@@ -280,7 +347,7 @@ function loadArtistImages(artist, parentEl, nextChild) {
 async function addUploadedImg(input) {
     const uploadedImgSection = document.querySelector(".uploadedImgSection");
     const fileInputWrapper = document.querySelector(".fileInputWrapper");
-    const id = input.parentElement.parentElement.parentElement.parentElement.id;
+    const id = input.parentElement.parentElement.parentElement.id;
 
     const artists = await uploadArtist(id);
     const artist = artists.find(a => a.id == id);
@@ -308,6 +375,9 @@ async function uploadArtist(id) {
 
     const response = await fetch('/artist', {
         method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+        },
         body: data
     });
     if (!response.ok) throw response;
@@ -315,13 +385,6 @@ async function uploadArtist(id) {
     return artists;
 }
 
-async function artistApplyClicked(id) {
-    // const artists = await uploadArtist(id);
-    // console.log(artists);
-    // load new artists
-    // loadArtists(artists);
-}
-
-async function artistCancelClicked() {
-    await loadArtists();
+function artistCancelClicked() {
+    init(); // load all artists and stages
 }

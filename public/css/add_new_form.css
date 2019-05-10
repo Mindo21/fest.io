@@ -1,0 +1,134 @@
+#addNewFormSection{
+	max-width: 1000px;
+	padding: 10px 20px;
+	background: rgb(235, 235, 235);
+    margin: auto;
+	padding: 1rem;
+	border-radius: 8px;
+}
+#addNewFormSection fieldset{
+	border: none;
+}
+#addNewFormSection legend {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+#addNewFormSection label {
+	display: block;
+	margin-bottom: 8px;
+}
+#addNewFormSection input[type="text"],
+#addNewFormSection input[type="date"],
+#addNewFormSection input[type="datetime"],
+#addNewFormSection input[type="email"],
+#addNewFormSection input[type="number"],
+#addNewFormSection input[type="search"],
+#addNewFormSection input[type="time"],
+#addNewFormSection input[type="url"],
+#addNewFormSection textarea,
+#addNewFormSection select {
+	background: rgba(255,255,255,.1);
+	border: 2px solid hsl(0, 76%, 50%);
+	border-radius: 4px;
+	font-size: 15px;
+	margin: 0;
+	outline: 0;
+	padding: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; 
+	background-color: #ffffff;
+	color:#000000;
+	-webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+	box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    margin-bottom: 30px;
+    display: unset;
+}
+#addNewFormSection input[type="text"]:focus,
+#addNewFormSection input[type="date"]:focus,
+#addNewFormSection input[type="datetime"]:focus,
+#addNewFormSection input[type="email"]:focus,
+#addNewFormSection input[type="number"]:focus,
+#addNewFormSection input[type="search"]:focus,
+#addNewFormSection input[type="time"]:focus,
+#addNewFormSection input[type="url"]:focus,
+#addNewFormSection textarea:focus,
+#addNewFormSection select:focus{
+	background: #f7edf7;
+}
+#addNewFormSection section.timepickerSection {
+    width: 40%;
+    margin-right: 5%;
+    margin-left: 5%;
+    float: left;
+}
+#addNewFormSection select{
+	-webkit-appearance: menulist-button;
+	height:35px;
+}
+#addNewFormSection .number {
+	background: rgb(95, 0, 95);
+	color: #fff;
+	height: 30px;
+	width: 30px;
+	display: inline-block;
+    font-size: 0.8em;
+    margin: 0;
+	margin-right: 1rem;
+	line-height: 30px;
+	text-align: center;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+	border-radius: 15px 15px 15px 0px;
+}
+#addNewFormSection select {
+    margin-bottom: 0;
+}
+#addNewFormSection a {
+	font-size: 1rem;;
+    margin: 1rem 1rem;
+    margin-bottom: 30px;
+    background: none;
+    text-decoration: underline;
+    display: block;
+}
+
+/* Show green borders when valid */
+#addNewFormSection input:not([type="submit"]):valid,
+#addNewFormSection textarea:valid,
+#addNewFormSection select:valid {
+    border: 2px solid hsl(120, 76%, 50%);
+}
+
+#applyBtn, #cancelBtn
+{
+	position: relative;
+	display: block;
+	padding: 19px 39px 18px 39px;
+	color: #FFF;
+	margin: 2rem auto;
+	background: rgb(145, 24, 145);
+	font-size: 18px;
+	text-align: center;
+	font-style: normal;
+	width: 100%;
+	border: 1px solid rgb(117, 6, 117);
+    border-width: 1px 1px 3px;
+    border-radius: 0.3rem;
+	margin-bottom: 10px;
+}
+#cancelBtn {
+    background: rgb(206, 36, 36);
+    border: 1px solid rgb(165, 12, 12);
+    border-width: 1px 1px 3px;
+}
+#applyBtn:hover
+{
+    cursor: pointer;
+	background: rgb(95, 0, 95);
+}
+
+#cancelBtn:hover {
+    cursor: pointer;
+    background: rgb(100, 3, 3);
+}

@@ -26,8 +26,10 @@ function displayPreviousImage() {
     artistImg.src = images[x];
 }
 
-function startChangingImages() {
-    setInterval(displayNextImage, IMG_CHANGE_TIME);
+function changeImages() {
+    displayNextImage();
+    // wait IMG_CHANGE_TIME and then find the current artist again (which changes the image and so on)
+    setTimeout(getCurrentArtist, IMG_CHANGE_TIME);
 }
 
 function getCurrentArtistImages() {
@@ -42,27 +44,33 @@ function getCurrentArtistImages() {
     }
 }
 
-async function getStageName() {
-    const response = await fetch("/stage/" + stageId);
-    if (!response.ok) throw response;
-    const stage = await response.json();
-    stageName.textContent = stage.name;
+async function generateStageName(givenStageName) {
+    if (!givenStageName) {
+        const response = await fetch("/stage/" + stageId);
+        if (!response.ok) throw response;
+        const stage = await response.json();
+        if (stage) stageName.textContent = stage.name;
+        else stageName.textContent = "STAGE NOT FOUND";
+    } else {
+        stageName.textContent = givenStageName;
+    }
 }
 
 function getCurrentArtist() {
     // find the artist locally by time
     const now = new Date();
     const currentTime = correctTime(now.getHours()) + ":" + correctTime(now.getMinutes());
-    currentArtist = artists.find((artist) => artist.id == 3)
+    currentArtist = artists.find((artist) => artist.startTime <= currentTime && artist.endTime >= currentTime);
     if (currentArtist) {
         // if there is an artist playing
         artistName.textContent = currentArtist.name;
     } else {
         // if there is no artist playing right now
-        artistName.textContent = "no artist playing right now";
+        artistName.textContent = "No artist playing right now...";
     }
     // load the artist's images
     getCurrentArtistImages();
+    changeImages();     // start changing the images
 }
 
 function correctTime(time) {
@@ -81,7 +89,8 @@ async function getAllArtists(artistsGiven) {
         });
     } else {
         artistsGiven.forEach((artist) => {
-            artists.push(artist);   // add the new fetched artists to the list
+            // add the new fetched artists on this stage to the list
+            if (artist.stageId == stageId) artists.push(artist);
         });
     }
 }
@@ -130,8 +139,8 @@ async function getArtistIcon(artist) {
 }
 
 async function init() {
-    getStageName();
-    startChangingImages();   // start changing the images
+    generateStageName();
+    // the rest is loaded thanks to the socket 'onconnection' emit
 }
 
 window.addEventListener('load', init);
@@ -144,15 +153,10 @@ socket.on('UPDATE_ARTISTS', async (artists) => {
     await getAllArtists(artists); // wait for the artists being loaded, then find the current artist
     getCurrentArtist();
     updateSchedule();
-
-    // let li = document.createElement("li");
-    // li.appendChild(document.createTextNode(JSON.stringify(artists)));
-    // messages.appendChild(li);
 });
 
-socket.on('UPDATE_STAGES', (data) => {
-    // console.log('socket message received: ', data);
-    // let li = document.createElement("li");
-    // li.appendChild(document.createTextNode(JSON.stringify(data)));
-    // messages.appendChild(li);
+socket.on('UPDATE_STAGES', (stages) => {
+    const stage = stages.find(stage => stage.id == stageId);
+    if (stage) generateStageName(stage.name);
+    else generateStageName("STAGE NOT FOUND")
 });

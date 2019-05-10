@@ -41,7 +41,13 @@ function sendArtists(req, res) {
 function addStage(req, res) {
     const stages = db.addStage(req.body);
     app.updateStagesSocket(stages);
-    res.json(stages);
+    if (req.accepts('html')) {
+        // browser should go to the listing of stages
+        res.redirect(303, '/');
+    } else {
+        // request that accepts JSON will instead get the data
+        res.json(stages);
+    }
 }
 
 module.exports = router;

@@ -11,7 +11,7 @@ const MAX_ID = 1000; // store up to 1000 artists/stages
 
 const artists = [
     {
-        id: 1,
+        id: 0,
         name: "Blue Zodiac",
         genre: "blues",
         description: "A band that plays blues",
@@ -22,7 +22,7 @@ const artists = [
         images: []
     },
     {
-        id: 2,
+        id: 1,
         name: "Fearless Flyers",
         genre: "funk",
         description: "We like to play on guitars only...",
@@ -33,7 +33,7 @@ const artists = [
         images: ["crab.jpg", "night.jpg", "landscape.jpg"]
     },
     {
-        id: 3,
+        id: 2,
         name: "Vulfpeck",
         genre: "funk",
         description: "Gangster band playing funk and hip hop only...",
@@ -45,10 +45,10 @@ const artists = [
     }
 ];
 const stages = [
-    {
-        id: 2,
-        name: "Side Stage"
-    }
+    // {
+    //     id: 0,
+    //     name: "Side Stage"
+    // }
 ];
 
 function getArtist(id) {
@@ -94,57 +94,68 @@ async function addArtist(reqFiles, newArtist) {
         artist = newArtist;
     }
     // then save the images
-    // move the files where we want them
-    // create the folder with artistId
-    try {
-        if (!fs.existsSync(config.uploaded_img + artist.id)){
-          fs.mkdirSync(config.uploaded_img + artist.id);
-        }
-    } catch (err) {
-    console.error(err);
-    }
-    
-    
-    // icon file
-    if (reqFiles.iconFile) {
-        const iconFile = reqFiles.iconFile[0];
-        const newIconFilePath = config.uploaded_img + artist.id + '/icon.jpg';
+    if (reqFiles) {
+        // move the files where we want them
+        // create the folder with artistId
         try {
-            await renameAsync(iconFile.path, newIconFilePath);
-        } catch (e) {
-            throw ['failed to move incoming file', e];
+            if (!fs.existsSync(config.uploaded_img + artist.id)){
+            fs.mkdirSync(config.uploaded_img + artist.id);
+            }
+        } catch (err) {
+            console.error(err);
         }
-    }
-    // img files (images of the artist)
-    const imgFilesNames = [];
-    if (reqFiles.imgFile) {
-        for (const imgFile of reqFiles.imgFile) {
-            const fileExt = imgFile.mimetype.split('/')[1] || 'png';
-            const newFilename = imgFile.filename + '.' + fileExt;
-            const newImgFilesPath = config.uploaded_img + artist.id + '/' + newFilename;
+        // icon file
+        if (reqFiles.iconFile) {
+            const iconFile = reqFiles.iconFile[0];
+            const newIconFilePath = config.uploaded_img + artist.id + '/icon.jpg';
             try {
-                await renameAsync(imgFile.path, newImgFilesPath);
+                await renameAsync(iconFile.path, newIconFilePath);
             } catch (e) {
                 throw ['failed to move incoming file', e];
             }
-            imgFilesNames.push(newFilename);
-            console.log("images:", imgFilesNames);
-        };
+        }
+        // img files (images of the artist)
+        const imgFilesNames = [];
+        if (reqFiles.imgFile) {
+            for (const imgFile of reqFiles.imgFile) {
+                const fileExt = imgFile.mimetype.split('/')[1] || 'png';
+                const newFilename = imgFile.filename + '.' + fileExt;
+                const newImgFilesPath = config.uploaded_img + artist.id + '/' + newFilename;
+                try {
+                    await renameAsync(imgFile.path, newImgFilesPath);
+                } catch (e) {
+                    throw ['failed to move incoming file', e];
+                }
+                imgFilesNames.push(newFilename);
+            };
+        }
+        // now add the files to the artist
+        artist.images = artist.images.concat(imgFilesNames);
+        console.log("artist stored: ", artist);
     }
-    // now add the files to the artist
-    artist.images = artist.images.concat(imgFilesNames);
-    console.log("new artist:", artist);
     // actually add the created artist to the array and return artists
     if (!existingArtist) artists.push(artist);
     return artists;
 }
 
-function addStage(stage) {
-    stages.push(stage);
+function addStage(newStage) {
+    // create the stage first
+    const stage = stages.find((s) => s.id == newStage.id);
+    if (stage) {
+        // if there already is a stage, give him the new data
+        stage.name = newArtist.name;
+    } else {
+        // create new stage and add it to the list
+        const newId = findNewId(stages);
+        if (newId == -1) return stages     // if the limit of stage is reached, dont add it
+        newStage.id = newId;
+        stages.push(newStage);
+    }
     return stages;
 }
 
 function findNewId(arrayOfObjects) {
+    if (!arrayOfObjects || arrayOfObjects.length <= 0) return 0;
     const largest_id = Math.max(...arrayOfObjects.map(e => parseInt(e.id)));
     if (largest_id + 1 > MAX_ID) {
         // if the limit is reached, dont add artist

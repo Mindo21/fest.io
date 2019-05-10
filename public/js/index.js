@@ -30,9 +30,21 @@ async function addingNewArtist() {
     if (existingForm) {
         // remove the existing form first (change it back to artistListItem) - just load the list again
         await loadArtists();
+        await loadStages();
     }
     // generate the form at the place of the addArtist button
     generateArtistForm();
+}
+
+async function addingNewStage() {
+    let existingForm = document.getElementById("addNewFormSection");
+    if (existingForm) {
+        // remove the existing form first (change it back to stageListItem) - just load the list again
+        await loadArtists();
+        await loadStages();
+    }
+    // generate the form at the place of the addStage button
+    generateStageForm();
 }
 
 async function artistClicked(id) {
@@ -78,7 +90,7 @@ async function loadStages(stages) {
 
     stagesList.innerHTML = "";
     // add each stage to the list
-    stages.forEach((stage) => addStageListItem(stage));
+    if (stages) stages.forEach((stage) => addStageListItem(stage));
     // add the add row
     addStageListItem();
     return stages;
@@ -90,6 +102,15 @@ function removeArtistListItem(artistListItem) {
     } else {
         // if I want to remove the addNew/form list item
         artistsList.removeChild(artistsList.lastChild);
+    }
+}
+
+function removeStageListItem(stageListItem) {
+    if (stageListItem) {
+        stagesList.removeChild(stageListItem);
+    } else {
+        // if I want to remove the addNew/form list item
+        stagesList.removeChild(stagesList.lastChild);
     }
 }
 
@@ -135,7 +156,7 @@ async function addArtistListItem(artist) {
 
         const name = document.createElement("span");
         name.classList.add("artistName");
-        name.appendChild(document.createTextNode("Add new..."));
+        name.appendChild(document.createTextNode("Add new artist..."));
         addNewItemBtn.appendChild(name);
     }
 }
@@ -146,9 +167,10 @@ function addStageListItem(stage) {
         const stageItem = document.createElement("li");
         stagesList.appendChild(stageItem);
 
-        const stageItemLink = document.createElement("button");
+        const stageItemLink = document.createElement("a");
         stageItemLink.classList.add("stageItemLink");
-        stageItemLink.setAttribute('onclick', 'stageClicked()');
+        stageItemLink.setAttribute('href', '/screen.html?id=' + stage.id);
+        stageItemLink.setAttribute('name', stage.id);
         stageItem.appendChild(stageItemLink);
 
         const name = document.createElement("span");
@@ -160,20 +182,20 @@ function addStageListItem(stage) {
         const li = document.createElement("li");
         stagesList.appendChild(li);
 
-        const liLink = document.createElement("button");
-        liLink.classList.add("addNewItemLink");
-        liLink.setAttribute('onclick', 'addingNewStage()');
-        li.appendChild(liLink);
+        const addNewItemBtn = document.createElement("button");
+        addNewItemBtn.classList.add("addNewItemBtn");
+        addNewItemBtn.setAttribute('onclick', 'addingNewStage()');
+        li.appendChild(addNewItemBtn);
 
         const icon = document.createElement("img");
         icon.classList.add("addIcon");
         icon.src = "../img/add.svg";
-        liLink.appendChild(icon);
+        addNewItemBtn.appendChild(icon);
 
         const name = document.createElement("span");
         name.classList.add("stageName");
-        name.appendChild(document.createTextNode("Add new..."));
-        liLink.appendChild(name);
+        name.appendChild(document.createTextNode("Add new stage..."));
+        addNewItemBtn.appendChild(name);
     }
 }
 

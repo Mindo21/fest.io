@@ -45,13 +45,15 @@ function sendArtist(req, res) {
 
 // POST
 async function addArtist(req, res) {
-    console.log("filessss: ", req.files);
-    console.log("body: ", req.body);
-    console.log("headers: ", req.headers['content-type']);
-    let artists = [];
-    // if (req.body != {}) artists = await db.addArtist(req.files, req.body);
-    app.updateArtistsSocket(artists);
-    res.json(artists);
+    const artists = await db.addArtist(req.files, req.body);
+    app.updateAllArtistsSocket(artists);
+    if (req.accepts('html')) {
+        // browser should go to the listing of artists
+        res.redirect(303, '/');
+    } else {
+        // request that accepts JSON will instead get the data
+        res.json(artists);
+    }
 }
 
 module.exports = router;

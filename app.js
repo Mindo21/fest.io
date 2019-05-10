@@ -12,7 +12,7 @@ const db = require(config.db);
 
 // this has to be above routers, because routers are using these functions
 module.exports = {
-    updateArtistsSocket: updateArtistsSocket,
+    updateAllArtistsSocket: updateAllArtistsSocket,
     updateStagesSocket: updateStagesSocket,
 }
 
@@ -23,7 +23,7 @@ const imgRouter = require('./routes/img.js');
 
 app.use(express.static('public'));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/artist', artistRouter);
 app.use('/stage', stageRouter);
@@ -47,7 +47,7 @@ io.on('connection', function(socket) {
     });
 });
 
-function updateArtistsSocket(artists) {
+function updateAllArtistsSocket(artists) {
     io.emit('UPDATE_ARTISTS', artists);
 }
 
