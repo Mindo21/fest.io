@@ -41,13 +41,17 @@ const artists = [
         endTime: "11:00",
         stageId: 2,
         icon: "icon.jpg",
-        images: []
+        images: ["sea.jpg"]
     }
 ];
 const stages = [
     {
         id: 1,
         name: "Side Stage"
+    },
+    {
+        id: 2,
+        name: "Main Stage"
     }
 ];
 
