@@ -1,4 +1,4 @@
-# fest.io
+# fest.io - UP879244
 
 fest.io - a client-server application helping festivals all around the globe.
 A web-application, with which a creator of any one day festival can inform audience about what is about to happen, and beautify the overall experience of the performances.
@@ -11,6 +11,7 @@ Things to do on the device:
 2. Click on a stage to be redirected to the stage screen (or you might copy the link and open it in any other browser).
 3. Add a new artist, while giving a lot of useful information (Name, Genre, Stage they are on, Times, Icon, Images to be shown at the stage...).
 4. Add a new stage...
+5. All the data is dynamically modified all the time (also the images saved on the server).
 
 Things that are shown on the stage screens:
 

@@ -37,8 +37,41 @@
             <section id="howToSection">
                 <h2 id="howToHeading">How to use this web application:</h2>
                 <p>
-                    # fest.io <br>
-                    A client-server application helping festivals all around the globe. <br>
+                        # fest.io <br>
+
+                        fest.io - a client-server application helping festivals all around the globe. <br>
+                        A web-application, with which a creator of any one day festival can inform audience about what is about to happen, and beautify the overall experience of the performances. <br>
+                        
+                        Key features <br>
+                        ------------ <br>
+                        Things to do on the device: <br>
+                        
+                        1. Click on an artist to see/edit their details. (If edited, the changes are shown in real time on stage screen or the device...) <br>
+                        2. Click on a stage to be redirected to the stage screen (or you might copy the link and open it in any other browser). <br>
+                        3. Add a new artist, while giving a lot of useful information (Name, Genre, Stage they are on, Times, Icon, Images to be shown at the stage...). <br>
+                        4. Add a new stage... <br>
+                        5. All the data is dynamically modified all the time (also the images saved on the server). <br>
+                        
+                        Things that are shown on the stage screens: <br>
+                        
+                        1. The LineUp of the day - names of the artists, their performance times, their uploaded icons... <br>
+                        2. The progress of the day - showing which artists have already performed, which ones are performing at the moment and which ones will be performing soon. <br>
+                        3. Slideshow of images sent by artists - during their performance, their photos will be shown to set the mood, as well as informing audience with all the other stuff shown. <br>
+                        4. Name of the stage (in case the audience is lost); <br>
+                        
+                        <br>
+                        Running fest.io
+                        <br>----------------
+                        
+                        <br>To get the example running, you must install the source code and all modules and then run the server from the command line:
+                        <br>It will run on port 8080.
+                        
+                        <br>
+                        <br>Additional info
+                        <br>---------------
+                        
+                        <br>The stage screens are connected through websocket to the server, in order to react to changes from the organiser's device in real-time.
+                        <br>I was thinking about expanding the project by including an actual database, but I kept on using my model-inmemory database at the end. The downside is that everytime the server restarts, all the manipulated data is lost :/
                 </p>
             </section>
         </main>
