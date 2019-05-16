@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node app.js",
     "start-n": "nodemon app.js",
-    "heroku-postbuild": "npm install && cd client && npm install --only-dev && npm install && npm run build",
     "test": "test"
   },
   "author": "UP879244",
